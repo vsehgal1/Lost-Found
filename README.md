@@ -1,1 +1,2 @@
-Matt Wong, Group 24, Lost & Found
+Group 24 - Lost & Found
+- Matt Wong
