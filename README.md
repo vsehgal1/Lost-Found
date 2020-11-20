@@ -1,4 +1,4 @@
-**Group 24 - Lost & Found**
+**Lost & Found Contributors**
 - Matt Wong
 - Tae Jung
 - Vikram Sehgal
