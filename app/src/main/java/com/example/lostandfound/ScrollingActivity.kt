@@ -77,6 +77,7 @@ class ScrollingActivity : AppCompatActivity() {
                     "Tawes Hall",
                     "Keys of type Keys")
             )
+
             itemAdapter.notifyDataSetChanged()
         }
         // VIKRAM CODE ENGS HERE
