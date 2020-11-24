@@ -11,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.ListView
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -25,9 +27,12 @@ class ScrollingActivity : AppCompatActivity() {
 
     val storage = Firebase.storage;
     val storageRef = storage.getReference();
-
+    private lateinit var listView : ListView
+    //button for test purposes
+    private lateinit var addBut : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i("This", "just started onCreate")
 
         //requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0);
         val fbref = FirebaseRef.create();
@@ -40,12 +45,46 @@ class ScrollingActivity : AppCompatActivity() {
 
 
         setContentView(R.layout.activity_scrolling)
-        setSupportActionBar(findViewById(R.id.toolbar))
-        findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+//        setSupportActionBar(findViewById(R.id.toolbar))
+
+//        findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
+//        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
+
+        // VIKRAM CODE STARTS HERE
+        //get button reference
+        addBut = findViewById(R.id.addItem)
+        //Get list view of scroll activity
+        listView = findViewById(R.id.listView)
+
+        //create testing data
+        var dataArray = ArrayList<LostItem>()
+        dataArray.add(
+            LostItem(
+            R.drawable.key_fig,
+            "Keys",
+            "Tawes Hall",
+            "Keys of type Keys")
+        )
+
+        // create itemAdapter object
+        val itemAdapter = ItemAdapter(this, dataArray)
+        listView.adapter = itemAdapter
+
+        addBut.setOnClickListener {
+            dataArray.add(
+                LostItem(
+                    R.drawable.key_fig,
+                    "Keys",
+                    "Tawes Hall",
+                    "Keys of type Keys")
+            )
+
+            itemAdapter.notifyDataSetChanged()
         }
+        // VIKRAM CODE ENGS HERE
     }
 
 
