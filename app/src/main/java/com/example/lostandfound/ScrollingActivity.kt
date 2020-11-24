@@ -16,6 +16,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 import java.io.FileInputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ScrollingActivity : AppCompatActivity() {
 
@@ -25,14 +29,14 @@ class ScrollingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Testing Firebase
-        val database = Firebase.database
-        val myRef = database.getReference("message")
-        myRef.setValue("Test")
-
         //requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0);
         val fbref = FirebaseRef.create();
-        fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg")
+        //fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg")
+        val pictureList = ArrayList<String>();
+        pictureList.add("url1");
+        pictureList.add("url2");
+        val date = LocalDateTime.now();
+        fbref.newSubmission("123456","Lost Bag", "Brown and empty", "Stamp Student Union", pictureList, date, pictureList);
 
 
         setContentView(R.layout.activity_scrolling)
