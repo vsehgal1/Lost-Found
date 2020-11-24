@@ -41,7 +41,10 @@ class ScrollingActivity : AppCompatActivity() {
         pictureList.add("url1");
         pictureList.add("url2");
         val date = LocalDateTime.now();
-        fbref.newSubmission("123456","Lost Bag", "Brown and empty", "Stamp Student Union", pictureList, date, pictureList);
+        fbref.newSubmission("derp","Lost Bag", "Brown and empty", "Stamp Student Union", pictureList, date, pictureList);
+
+        fbref.fetchSubmissionsList()
+
 
 
         setContentView(R.layout.activity_scrolling)
