@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -13,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.ListView
+import androidx.appcompat.widget.SearchView;
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -24,8 +26,10 @@ class ScrollingActivity : AppCompatActivity() {
     val storage = Firebase.storage;
     val storageRef = storage.getReference();
     private lateinit var listView : ListView
+    private lateinit var searchView : SearchView
     //button for test purposes
     private lateinit var addBut : Button
+    private lateinit var addButs : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("This", "just started onCreate")
@@ -41,29 +45,16 @@ class ScrollingActivity : AppCompatActivity() {
 
 
         setContentView(R.layout.activity_scrolling)
-//        setSupportActionBar(findViewById(R.id.toolbar))
-
-//        findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
-//        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
 
         // VIKRAM CODE STARTS HERE
         //get button reference
-        addBut = findViewById(R.id.addItem)
+        addBut = findViewById(R.id.addItemA)
+        addButs = findViewById(R.id.addItemB)
         //Get list view of scroll activity
         listView = findViewById(R.id.listView)
-
+        searchView = findViewById(R.id.searchView)
         //create testing data
         var dataArray = ArrayList<LostItem>()
-        dataArray.add(
-            LostItem(
-            R.drawable.key_fig,
-            "Keys",
-            "Tawes Hall",
-            "Keys of type Keys")
-        )
 
         // create itemAdapter object
         val itemAdapter = ItemAdapter(this, dataArray)
@@ -79,6 +70,34 @@ class ScrollingActivity : AppCompatActivity() {
             )
             itemAdapter.notifyDataSetChanged()
         }
+        addButs.setOnClickListener {
+            dataArray.add(
+                LostItem(
+                    R.drawable.iphone,
+                    "iPhone",
+                    "Eppley Center",
+                    "Iphone XS")
+            )
+            itemAdapter.notifyDataSetChanged()
+        }
+
+        // create search view object
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.i("Click", "Reached searchView listener")
+                if (TextUtils.isEmpty(newText)){
+                    itemAdapter.filter("")
+                    listView.clearTextFilter()
+                }
+                else newText?.let { itemAdapter.filter(it) }
+                return false
+            }
+
+        })
         // VIKRAM CODE ENGS HERE
     }
 

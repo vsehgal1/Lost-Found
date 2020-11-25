@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -34,16 +34,30 @@
 <!--    </com.google.android.material.appbar.AppBarLayout>-->
 
 <!--    VIKRAM CODE STARTS HERE-->
-    <Button
-        android:id="@+id/addItem"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </androidx.appcompat.widget.SearchView>
+    <Button
+        android:id="@+id/addItemA"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Item" />
+        android:layout_below="@id/searchView"
+        android:text="Add Item A" />
+    <Button
+        android:id="@+id/addItemB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:layout_toRightOf="@id/addItemA"
+        android:text="Add Item B" />
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/addItemA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
@@ -63,4 +77,4 @@
 <!--        app:layout_anchor="@id/app_bar"-->
 <!--        app:layout_anchorGravity="bottom|end"-->
 <!--        app:srcCompat="@android:drawable/ic_dialog_email" />-->
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
