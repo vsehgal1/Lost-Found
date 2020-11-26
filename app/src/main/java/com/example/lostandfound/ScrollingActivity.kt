@@ -68,6 +68,7 @@ class ScrollingActivity : AppCompatActivity() {
                     "Tawes Hall",
                     "Keys of type Keys")
             )
+            itemAdapter.flag = true
             itemAdapter.notifyDataSetChanged()
         }
         addButs.setOnClickListener {
@@ -78,6 +79,7 @@ class ScrollingActivity : AppCompatActivity() {
                     "Eppley Center",
                     "Iphone XS")
             )
+            itemAdapter.flag = true
             itemAdapter.notifyDataSetChanged()
         }
 

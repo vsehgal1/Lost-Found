@@ -17,12 +17,12 @@ import kotlin.collections.ArrayList
 class ItemAdapter(private val context: Context,
                   private val dataSource: ArrayList<LostItem>) : BaseAdapter() {
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    var flag = true
+    var tempList : ArrayList<LostItem> = ArrayList()
 
-    lateinit var tempList : ArrayList<LostItem>
-
-    init {
-        this.tempList.addAll(dataSource)
-    }
+//    init {
+//        this.tempList.addAll(dataSource)
+//    }
 
     override fun getCount(): Int {
 //        TODO("Not yet implemented")
@@ -58,9 +58,12 @@ class ItemAdapter(private val context: Context,
     //filter function
     fun filter(charText : String){
         //create deep copy of
-//        for(i in dataSource){
-//            tempList.add(LostItem(i.img,i.name,i.locationFound,i.desc))
-//        }
+        if (flag){
+            tempList.clear()
+            for(i in dataSource){
+            tempList.add(LostItem(i.img,i.name,i.locationFound,i.desc))
+            flag = false
+        }}
         val charText = charText.toLowerCase(Locale.getDefault())
         dataSource.clear()
         Log.i("Click", "temp_list at call:" + tempList.size.toString())
