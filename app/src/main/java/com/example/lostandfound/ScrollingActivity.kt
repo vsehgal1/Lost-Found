@@ -20,6 +20,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 import java.io.FileInputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ScrollingActivity : AppCompatActivity() {
 
@@ -34,14 +38,17 @@ class ScrollingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.i("This", "just started onCreate")
 
-        // Testing Firebase
-        val database = Firebase.database
-        val myRef = database.getReference("message")
-        myRef.setValue("Test")
-
         //requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0);
         val fbref = FirebaseRef.create();
-        fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg")
+        //fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg")
+        val pictureList = ArrayList<String>();
+        pictureList.add("url1");
+        pictureList.add("url2");
+        val date = LocalDateTime.now();
+        fbref.newSubmission("derp","Lost Bag", "Brown and empty", "Stamp Student Union", pictureList, date, pictureList);
+
+        fbref.fetchSubmissionsList()
+
 
 
         setContentView(R.layout.activity_scrolling)
@@ -80,8 +87,6 @@ class ScrollingActivity : AppCompatActivity() {
                     "Iphone XS")
             )
             itemAdapter.flag = true
-            itemAdapter.notifyDataSetChanged()
-        }
 
         // create search view object
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
