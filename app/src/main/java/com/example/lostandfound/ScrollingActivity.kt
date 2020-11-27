@@ -98,6 +98,8 @@ class ScrollingActivity : AppCompatActivity() {
                 )
             )
             itemAdapter.flag = true
+            itemAdapter.notifyDataSetChanged()
+        }
 
             // create search view object
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -119,13 +121,13 @@ class ScrollingActivity : AppCompatActivity() {
         }
 
 
-        fun onCreateOptionsMenu(menu: Menu): Boolean {
+        override fun onCreateOptionsMenu(menu: Menu): Boolean {
             // Inflate the menu; this adds items to the action bar if it is present.
             menuInflater.inflate(R.menu.menu_scrolling, menu)
             return true
         }
 
-        fun onOptionsItemSelected(item: MenuItem): Boolean {
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
             // Handle action bar item clicks here. The action bar will
             // automatically handle clicks on the Home/Up button, so long
             // as you specify a parent activity in AndroidManifest.xml.
@@ -135,7 +137,6 @@ class ScrollingActivity : AppCompatActivity() {
                 else -> super.onOptionsItemSelected(item)
             }
         }
-    }
 
         companion object {
             fun create(): FirebaseRef = FirebaseRef();
