@@ -29,11 +29,12 @@ class ScrollingActivity : AppCompatActivity() {
 
     val storage = Firebase.storage;
     val storageRef = storage.getReference();
-    private lateinit var listView : ListView
-    private lateinit var searchView : SearchView
+    private lateinit var listView: ListView
+    private lateinit var searchView: SearchView
+
     //button for test purposes
-    private lateinit var addBut : Button
-    private lateinit var addButs : Button
+    private lateinit var addBut: Button
+    private lateinit var addButs: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("This", "just started onCreate")
@@ -45,7 +46,15 @@ class ScrollingActivity : AppCompatActivity() {
         pictureList.add("url1");
         pictureList.add("url2");
         val date = LocalDateTime.now();
-        fbref.newSubmission("derp","Lost Bag", "Brown and empty", "Stamp Student Union", pictureList, date, pictureList);
+        fbref.newSubmission(
+            "derp",
+            "Lost Bag",
+            "Brown and empty",
+            "Stamp Student Union",
+            pictureList,
+            date,
+            pictureList
+        );
 
         fbref.fetchSubmissionsList()
 
@@ -73,7 +82,8 @@ class ScrollingActivity : AppCompatActivity() {
                     R.drawable.key_fig,
                     "Keys",
                     "Tawes Hall",
-                    "Keys of type Keys")
+                    "Keys of type Keys"
+                )
             )
             itemAdapter.flag = true
             itemAdapter.notifyDataSetChanged()
@@ -84,52 +94,52 @@ class ScrollingActivity : AppCompatActivity() {
                     R.drawable.iphone,
                     "iPhone",
                     "Eppley Center",
-                    "Iphone XS")
+                    "Iphone XS"
+                )
             )
             itemAdapter.flag = true
 
-        // create search view object
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                Log.i("Click", "Reached searchView listener")
-                if (TextUtils.isEmpty(newText)){
-                    itemAdapter.filter("")
-                    listView.clearTextFilter()
+            // create search view object
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
                 }
-                else newText?.let { itemAdapter.filter(it) }
-                return false
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    Log.i("Click", "Reached searchView listener")
+                    if (TextUtils.isEmpty(newText)) {
+                        itemAdapter.filter("")
+                        listView.clearTextFilter()
+                    } else newText?.let { itemAdapter.filter(it) }
+                    return false
+                }
+
+            })
+            // VIKRAM CODE ENGS HERE
+        }
+
+
+        fun onCreateOptionsMenu(menu: Menu): Boolean {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            menuInflater.inflate(R.menu.menu_scrolling, menu)
+            return true
+        }
+
+        fun onOptionsItemSelected(item: MenuItem): Boolean {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+
+            return when (item.itemId) {
+                R.id.action_settings -> true
+                else -> super.onOptionsItemSelected(item)
             }
-
-        })
-        // VIKRAM CODE ENGS HERE
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_scrolling, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
-
-    companion object {
-        fun create(): FirebaseRef = FirebaseRef();
-        const val TAG = "Lost&Found"
-        const val IMAGE_PATH = "images/"
+        companion object {
+            fun create(): FirebaseRef = FirebaseRef();
+            const val TAG = "Lost&Found";
+            const val IMAGE_PATH = "images/";
+        }
     }
-}
