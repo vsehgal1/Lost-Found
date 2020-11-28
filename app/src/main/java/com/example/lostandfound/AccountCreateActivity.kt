@@ -22,6 +22,7 @@ class AccountCreateActivity : AppCompatActivity() {
     private lateinit var nameText: EditText
     private lateinit var phoneNumberText: EditText
     private lateinit var databaseUsers: DatabaseReference
+    private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +35,8 @@ class AccountCreateActivity : AppCompatActivity() {
         passwordText = findViewById(R.id.create_password)
         nameText = findViewById(R.id.create_name)
         phoneNumberText = findViewById(R.id.create_number)
+
+        auth = FirebaseAuth.getInstance()
 
         // Create Account Button
         createButton.setOnClickListener {
@@ -48,12 +51,13 @@ class AccountCreateActivity : AppCompatActivity() {
                 Log.i(TAG, "email: "+ email)
                 Log.i(TAG, "password: "+ password)
 
-                FirebaseAuth.getInstance()
+                auth
                     .createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener { // Account Created
                         // Send Email Verification
-                        val currentUser = Firebase.auth.currentUser
+                        val currentUser = auth.currentUser
                         currentUser!!.sendEmailVerification()
+                        Log.i("TAG", "Email Verification Sent")
 
                         uid = currentUser.uid
                         databaseUsers = databaseUsers.child(userID)

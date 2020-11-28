@@ -1,6 +1,7 @@
 package com.example.lostandfound
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,8 +9,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -20,10 +23,12 @@ class LoginActivity : AppCompatActivity() {
     val storage = Firebase.storage;
     val storageRef = storage.getReference();
 
-    lateinit var loginButton: Button
-    lateinit var createButton: Button
+    private lateinit var loginButton: Button
+    private lateinit var createButton: Button
     private lateinit var emailText: EditText
     private lateinit var passwordText: EditText
+    private lateinit var resetPassword: TextView
+    private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +51,9 @@ class LoginActivity : AppCompatActivity() {
         createButton = findViewById(R.id.new_account)
         emailText = findViewById(R.id.email)
         passwordText = findViewById(R.id.password)
+        resetPassword = findViewById(R.id.reset_password)
+
+        auth = FirebaseAuth.getInstance()
 
         val scrollingIntent = Intent(
             this@LoginActivity,
@@ -62,12 +70,12 @@ class LoginActivity : AppCompatActivity() {
                 Log.i(TAG, "email: " + email)
                 Log.i(TAG, "password: " + password)
 
-                FirebaseAuth.getInstance()
+                auth
                     .signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener {// Login Success
 
                         // Check email verification status
-                        FirebaseAuth.getInstance().currentUser?.let { firebaseUser ->
+                        auth.currentUser?.let { firebaseUser ->
                             // Email Verified
                             if (firebaseUser.isEmailVerified) {
 
@@ -104,6 +112,12 @@ class LoginActivity : AppCompatActivity() {
         // Create Account Button
         createButton.setOnClickListener {
             val intent = Intent(this@LoginActivity, AccountCreateActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Reset Password Button
+        resetPassword.setOnClickListener {
+            val intent = Intent(this@LoginActivity, ResetPasswordActivity::class.java)
             startActivity(intent)
         }
     }
