@@ -1,5 +1,3 @@
-// VIKRAM CODE STARTS HERE
-
 package com.example.lostandfound
 
 import android.content.Context
@@ -61,7 +59,7 @@ class ItemAdapter(private val context: Context,
         if (flag){
             tempList.clear()
             for(i in dataSource){
-            tempList.add(LostItem(i.img,i.name,i.locationFound,i.desc))
+            tempList.add(LostItem(i.uid,i.id,i.img,i.name,i.locationFound,i.desc, i.dateFound, i.datePosted))
             flag = false
         }}
         val charText = charText.toLowerCase(Locale.getDefault())
@@ -86,4 +84,3 @@ class ItemAdapter(private val context: Context,
 
 }
 
-// VIKRAM CODE ENDS HERE

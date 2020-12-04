@@ -1,6 +1,7 @@
 package com.example.lostandfound
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
@@ -13,9 +14,12 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView;
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -41,6 +45,7 @@ class ScrollingActivity : AppCompatActivity() {
     //button for test purposes
     private lateinit var addBut: Button
     private lateinit var addButs: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scrolling)
@@ -48,50 +53,45 @@ class ScrollingActivity : AppCompatActivity() {
         // gets the UID of the user after login if empty
         if(UID.equals(""))
             UID = intent.getStringExtra("uid").toString();
-        /*
-        var arr1 = ArrayList<String>()
-        var arr2 = ArrayList<String>()
-        arr1.add("pictureURL1")
-        arr2.add("tag1")
-        arr2.add("tag2")
-        fbref.newSubmission(
-            UID,
-            "Lost Bag",
-            "Brown Bag with Flaps",
-            "Stamp Student Union",
-            arr1,
-            LocalDateTime.now(),
-            arr2
-        )
 
+
+        //get button reference
+        addBut = findViewById(R.id.addItemA)
+        addButs = findViewById(R.id.addItemB)
+
+        //Get list view of scroll activity
+        listView = findViewById(R.id.listView)
+        searchView = findViewById(R.id.searchView)
+
+        //Local phone instance array
+        var dataArray = ArrayList<LostItem>()
+
+        // Retrieve firebase data:
         var listener = object: OnGetDataListener {
             override fun onSuccess(snapshot: Object) {
-                var uri = snapshot as String
-                Log.i(TAG, uri)
-
+                var list = snapshot as ArrayList<LostItemSubmission>
+                Log.i(TAG, list.toString())
             }
 
             override fun onStart() {
             }
 
             override fun onFailure(error: Object) {
+                var err = error as DatabaseError
+                Log.i(TAG, err.message)
+                Toast.makeText(applicationContext,
+                    "NETWORK ERROR - Please check your network connection",
+                    Toast.LENGTH_SHORT).show()
             }
 
         }
+        fbref.fetchSubmissionsList(listener)
 
-        fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg", "matt44", listener);*/
-
-
-
-        // VIKRAM CODE STARTS HERE
-        //get button reference
-        addBut = findViewById(R.id.addItemA)
-        addButs = findViewById(R.id.addItemB)
-        //Get list view of scroll activity
-        listView = findViewById(R.id.listView)
-        searchView = findViewById(R.id.searchView)
-        //create testing data
-        var dataArray = ArrayList<LostItem>()
+        //populate local arraylist from with fetched submissions from global arraylist
+        // image value is passed as 0 for now
+        for(i:LostItemSubmission in fbref.lostItemsList){
+            dataArray.add(LostItem(i.userid,i.id,0,i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
+        }
 
         // create itemAdapter object
         val itemAdapter = ItemAdapter(this, dataArray)
@@ -99,11 +99,13 @@ class ScrollingActivity : AppCompatActivity() {
 
         addBut.setOnClickListener {
             dataArray.add(
-                LostItem(
+                LostItem("asd","fdgd",
                     R.drawable.key_fig,
                     "Keys",
                     "Tawes Hall",
-                    "Keys of type Keys"
+                    "Keys of type Keys",
+                    "11/10/2020",
+                    "12/04/2020"
                 )
             )
             itemAdapter.flag = true
@@ -111,18 +113,43 @@ class ScrollingActivity : AppCompatActivity() {
         }
         addButs.setOnClickListener {
             dataArray.add(
-                LostItem(
+                LostItem("gfgf","fd",
                     R.drawable.iphone,
                     "iPhone",
                     "Eppley Center",
-                    "Iphone XS"
+                    "Iphone XS",
+                    "11/24/2020",
+                    "12/04/2020"
                 )
             )
             itemAdapter.flag = true
             itemAdapter.notifyDataSetChanged()
         }
 
-            // create search view object
+        // set listview items to onclick listener
+        listView.setOnItemClickListener { parent, view, position, id ->
+            val it : LostItem= itemAdapter.getItem(position) as LostItem
+//            Toast.makeText(applicationContext,it.name,Toast.LENGTH_SHORT).show()
+            val name = it.name.toString()
+            val imageLoc = it.img.toString()
+            val location = it.locationFound.toString()
+            val desc = it.desc.toString()
+            val dateFound = it.dateFound
+            val datePosted = it.datePosted
+
+            //send intent to Claimitem.kt
+            val intent = Intent(this, ClaimItem::class.java)
+            intent.putExtra("Name", name)
+            intent.putExtra("Image", imageLoc)
+            intent.putExtra("Location", location)
+            intent.putExtra("Desc", desc)
+            intent.putExtra("Found", dateFound)
+            intent.putExtra("Posted", datePosted)
+            startActivity(intent)
+        }
+
+
+        // create search view object
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
@@ -138,7 +165,6 @@ class ScrollingActivity : AppCompatActivity() {
                 }
 
             })
-            // VIKRAM CODE ENGS HERE
         }
 
 
