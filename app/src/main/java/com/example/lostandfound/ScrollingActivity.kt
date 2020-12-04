@@ -16,6 +16,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.widget.SearchView;
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -48,12 +49,10 @@ class ScrollingActivity : AppCompatActivity() {
         // gets the UID of the user after login if empty
         if(UID.equals(""))
             UID = intent.getStringExtra("uid").toString();
-        /*
+
         var arr1 = ArrayList<String>()
-        var arr2 = ArrayList<String>()
         arr1.add("pictureURL1")
-        arr2.add("tag1")
-        arr2.add("tag2")
+
         fbref.newSubmission(
             UID,
             "Lost Bag",
@@ -61,25 +60,25 @@ class ScrollingActivity : AppCompatActivity() {
             "Stamp Student Union",
             arr1,
             LocalDateTime.now(),
-            arr2
+            "tag1 tag2"
         )
 
         var listener = object: OnGetDataListener {
             override fun onSuccess(snapshot: Object) {
-                var uri = snapshot as String
-                Log.i(TAG, uri)
-
+                var list = snapshot as ArrayList<LostItemSubmission>
+                Log.i(TAG, list.toString())
             }
 
             override fun onStart() {
             }
 
             override fun onFailure(error: Object) {
+                var err = error as DatabaseError
+                Log.i(TAG, err.message)
             }
 
         }
-
-        fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg", "matt44", listener);*/
+        fbref.fetchSubmissionsList(listener)
 
 
 

@@ -36,7 +36,7 @@ data class LostItemSubmission(
     val pictureURLs: ArrayList<String>,
     val dateFound: String,
     val dateSubmitted: String,
-    val tags: ArrayList<String>);
+    val tags: String);
 
 data class User(
     val email: String="",
@@ -91,7 +91,7 @@ class FirebaseRef: AppCompatActivity() {
      * Function: newSubmission
      * Adds a new Lost Item submission onto Firebase database
      */
-    public fun newSubmission(uid: String, name: String, description: String, location: String, pictureURLs: ArrayList<String>, dateFound: LocalDateTime, tags: ArrayList<String>) {
+    public fun newSubmission(uid: String, name: String, description: String, location: String, pictureURLs: ArrayList<String>, dateFound: LocalDateTime, tags: String) {
         val database = Firebase.database
         val myRef = database.getReference(SUBMISSIONS_PATH);
         val id = database.getReference(SUBMISSIONS_PATH).push().key;
@@ -138,7 +138,7 @@ class FirebaseRef: AppCompatActivity() {
                     var pictureURLs = child.child("pictureURLs").getValue() as ArrayList<String>
                     var dateFound  = child.child("dateFound").getValue() as String
                     var dateSubmitted = child.child("dateSubmitted").getValue() as String
-                    var tags = child.child("tags").getValue() as ArrayList<String>
+                    var tags = child.child("tags").getValue() as String
 
                     list.add(LostItemSubmission(id, userid.toString(), name, location, description, pictureURLs, dateFound, dateSubmitted, tags))
                 }
