@@ -34,15 +34,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Testing Firebase
-        val database = Firebase.database
-        val myRef = database.getReference("message")
-        myRef.setValue("Test")
-
-        //requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0);
-        val fbref = FirebaseRef.create();
-        fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg")
-
         setContentView(R.layout.activity_login)
 
         // Tae' Code Starts Here
@@ -83,6 +74,9 @@ class LoginActivity : AppCompatActivity() {
 
                                 Toast.makeText(this, "Login Success", Toast.LENGTH_LONG).show()
                                 Log.i(TAG, "Login Success")
+
+                                // attaches UID to intent
+                                scrollingIntent.putExtra("uid", uid)
                                 // Go to next page after login
                                 startActivity(scrollingIntent)
                                 Log.i(TAG, "Email Verified")

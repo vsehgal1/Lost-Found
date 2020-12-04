@@ -5,8 +5,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseError
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.*
@@ -16,7 +18,32 @@ import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.sql.RowSetListener
 import kotlin.collections.ArrayList
+
+public interface OnGetDataListener {
+    fun onSuccess(snapshot: Object);
+    fun onStart();
+    fun onFailure(error: Object);
+}
+
+data class LostItemSubmission(
+    val id: String = "",
+    val userid: String="",
+    val name: String ="",
+    val location: String ="",
+    val description: String ="",
+    val pictureURLs: ArrayList<String>,
+    val dateFound: String,
+    val dateSubmitted: String,
+    val tags: ArrayList<String>);
+
+data class User(
+    val email: String="",
+    val name: String="",
+    val phone_number: String="",
+    val uid: String =""
+)
 
 
 class FirebaseRef: AppCompatActivity() {
@@ -29,16 +56,18 @@ class FirebaseRef: AppCompatActivity() {
     /**
      * Function: uploadImage
      * Desc: Takes in an image file and the path of that file and uploads it to Firebase storage
+     * Listener
+     *  - onSuccess(String path of the image in Firebase storage)
+     *  - onFailure(Exception Object)
+     * Returns
+     *  - String path of the image in Firebase storage
      */
-    public fun uploadImage(fName: String, fpath: String) {
-        // setReferences to database
-        val fileRef = storageRef.child(fName);
-        val filePathRef = storageRef.child(IMAGE_PATH + fName);
+    public fun uploadImage(fName: String, fpath: String, submission_id: String, in_listener: OnGetDataListener) {
+        in_listener.onStart()
 
-        if(fileRef.name != filePathRef.name) {
-            Log.i(TAG, "ERROR: File path and file name mismatch");
-            return;
-        }
+        val path = IMAGE_PATH + submission_id +"/"+ fName
+        // setReferences to database
+        val filePathRef = storageRef.child(IMAGE_PATH).child(submission_id).child(fName);
 
         // upload image via stream
         val imgFile = File(fpath) as File;
@@ -48,11 +77,13 @@ class FirebaseRef: AppCompatActivity() {
         }
 
         val stream = FileInputStream(imgFile);
-        val uploadTask = fileRef.putStream(stream);
+        val uploadTask = filePathRef.putStream(stream);
         uploadTask.addOnFailureListener() {
             Log.i(TAG, "ERROR: Failed to Upload");
+            in_listener.onFailure(it as Object)
         }.addOnSuccessListener {  taskSnapshot ->
             Log.i(TAG, "Image Upload Success!");
+            in_listener.onSuccess(path as Object)
         }
     }
 
@@ -60,7 +91,7 @@ class FirebaseRef: AppCompatActivity() {
      * Function: newSubmission
      * Adds a new Lost Item submission onto Firebase database
      */
-    public fun newSubmission(userid: String, name: String, description: String, location: String, pictureURLs: ArrayList<String>, dateFound: LocalDateTime, tags: ArrayList<String>) {
+    public fun newSubmission(uid: String, name: String, description: String, location: String, pictureURLs: ArrayList<String>, dateFound: LocalDateTime, tags: ArrayList<String>) {
         val database = Firebase.database
         val myRef = database.getReference(SUBMISSIONS_PATH);
         val id = database.getReference(SUBMISSIONS_PATH).push().key;
@@ -69,8 +100,7 @@ class FirebaseRef: AppCompatActivity() {
         val current_time = LocalDateTime.now();
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-
-        val toAdd = LostItemSubmission(id!!, userid, name, location, description, pictureURLs, dateFound.format(formatter), current_time.format(formatter), tags);
+        val toAdd = LostItemSubmission(id!!, uid, name, location, description, pictureURLs, dateFound.format(formatter), current_time.format(formatter), tags);
         myRef.child(id).setValue(toAdd);
 
     }
@@ -78,16 +108,24 @@ class FirebaseRef: AppCompatActivity() {
     /**
      *  Function: fetchSubmissionsList
      *  Fetches all submissions and puts them in the global List, LostItemsList
+     *  Listener
+     *  - onSuccess(ArrayList<LostItemSubmission>)
+     *  - onFailure(DatabaseError)
+     * Returns
+     *  Nothing
      */
-    public fun fetchSubmissionsList(){
+    public fun fetchSubmissionsList(in_listener : OnGetDataListener) {
+        in_listener.onStart()
+
         val database = Firebase.database
         val myRef = database.getReference(SUBMISSIONS_PATH);
 
-        // fetches data
-        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        var listener = object: OnGetDataListener {
+
+            override fun onSuccess(snapshot: Object) {
+                var dataSnapshot = snapshot as DataSnapshot
                 val list = ArrayList<LostItemSubmission>()
-                val children = snapshot!!.children
+                val children = dataSnapshot!!.children
                 for (child in children) {
 
                     Log.i(TAG, "Fetching Data: " + child.toString())
@@ -106,22 +144,89 @@ class FirebaseRef: AppCompatActivity() {
                 }
 
                 lostItemsList = list
-
+                in_listener.onSuccess(list as Object)
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.i(TAG, error.message)
+            override fun onStart() {
+                Log.i(TAG, "Getting all Submissions...")
             }
-        })
 
+            override fun onFailure(error: Object) {
+                var databaseError = error as DatabaseError
+                Log.i(TAG, "Firebase Fetch Failed: " + databaseError.message);
+                in_listener.onFailure(error);
+            }
+
+        }
+        fetchSingleValue(myRef, listener);
     }
+
+    /**
+     * Function: FindUserByID
+     * Fetches user data with their provided UID
+     * * Listener
+     *  - onSuccess(User)
+     *  - onFailure(DatabaseError)
+     * Returns
+     *  - Nothing
+     */
+    public fun findUserByID(uid : String, in_listener: OnGetDataListener) {
+        in_listener.onStart()
+        val database = Firebase.database
+        val myRef = database.getReference(USER_PATH);
+
+        var listener = object: OnGetDataListener {
+            override fun onSuccess(snapshot: Object) {
+                var dataSnapshot = snapshot as DataSnapshot
+                val children = dataSnapshot!!.children
+                for (child in children) {
+
+                    var curID = child.child("uid").getValue() as String
+                    if(curID.equals(uid)) {
+                        val email = child.child("email").getValue() as String
+                        val name  = child.child("name").getValue() as String
+                        val phone_number = child.child("phone_number").getValue() as String
+
+                        in_listener.onSuccess(User(email, name, phone_number,uid) as Object)
+                    }
+                }
+            }
+            override fun onStart() {
+                Log.i(TAG, "Getting Users...")
+            }
+
+            override fun onFailure(error: Object) {
+                in_listener.onFailure(error)
+                var databaseError = error as DatabaseError
+                Log.i(TAG, "Firebase Fetch Failed: " + databaseError.message);
+            }
+        }
+
+        fetchSingleValue(myRef, listener)
+    }
+
+    /**
+     * Private helper function that fetches single data entries from the database
+     */
+    private fun fetchSingleValue(ref: DatabaseReference, listener: OnGetDataListener){
+        listener.onStart();
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listener.onSuccess(snapshot as Object);
+            }
+            override fun onCancelled(error: DatabaseError) {
+                listener.onFailure(error as Object);
+            }
+        });
+    }
+
 
     companion object {
         fun create(): FirebaseRef = FirebaseRef();
         const val TAG = "Lost&Found-FirebaseRef"
         const val IMAGE_PATH = "images/"
         const val SUBMISSIONS_PATH = "submissions/"
+        const val USER_PATH = "users/"
     }
 }
 
-data class LostItemSubmission(val id: String = "", val userid: String="", val name: String ="", val location: String ="", val description: String ="", val pictureURLs: ArrayList<String>, val dateFound: String, val dateSubmitted: String, val tags: ArrayList<String>);

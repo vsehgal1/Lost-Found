@@ -3,6 +3,7 @@ package com.example.lostandfound
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -20,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 import java.io.FileInputStream
+import java.net.URI
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -27,8 +29,12 @@ import kotlin.collections.ArrayList
 
 class ScrollingActivity : AppCompatActivity() {
 
-    val storage = Firebase.storage;
-    val storageRef = storage.getReference();
+    // user id of the current user
+    var UID: String = "";
+
+    // Firebase Ref reference
+    val fbref = FirebaseRef.create()
+
     private lateinit var listView: ListView
     private lateinit var searchView: SearchView
 
@@ -37,30 +43,45 @@ class ScrollingActivity : AppCompatActivity() {
     private lateinit var addButs: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("This", "just started onCreate")
-
-        //requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0);
-        val fbref = FirebaseRef.create();
-        //fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg")
-        val pictureList = ArrayList<String>();
-        pictureList.add("url1");
-        pictureList.add("url2");
-        val date = LocalDateTime.now();
-        fbref.newSubmission(
-            "derp",
-            "Lost Bag",
-            "Brown and empty",
-            "Stamp Student Union",
-            pictureList,
-            date,
-            pictureList
-        );
-
-        fbref.fetchSubmissionsList()
-
-
-
         setContentView(R.layout.activity_scrolling)
+
+        // gets the UID of the user after login if empty
+        if(UID.equals(""))
+            UID = intent.getStringExtra("uid").toString();
+        /*
+        var arr1 = ArrayList<String>()
+        var arr2 = ArrayList<String>()
+        arr1.add("pictureURL1")
+        arr2.add("tag1")
+        arr2.add("tag2")
+        fbref.newSubmission(
+            UID,
+            "Lost Bag",
+            "Brown Bag with Flaps",
+            "Stamp Student Union",
+            arr1,
+            LocalDateTime.now(),
+            arr2
+        )
+
+        var listener = object: OnGetDataListener {
+            override fun onSuccess(snapshot: Object) {
+                var uri = snapshot as String
+                Log.i(TAG, uri)
+
+            }
+
+            override fun onStart() {
+            }
+
+            override fun onFailure(error: Object) {
+            }
+
+        }
+
+        fbref.uploadImage("wowowne.jpg", "storage/emulated/0/Download/wowowne.jpg", "matt44", listener);*/
+
+
 
         // VIKRAM CODE STARTS HERE
         //get button reference
