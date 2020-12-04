@@ -116,6 +116,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // Set Password Text to blank upon resume
+        passwordText = findViewById(R.id.password)
+        passwordText.setText("")
+        Log.i(TAG, "password text set blank")
+    }
+
     // Tae's Code Ends Here
 
 
