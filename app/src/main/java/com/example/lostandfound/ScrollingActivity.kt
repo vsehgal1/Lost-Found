@@ -54,6 +54,21 @@ class ScrollingActivity : AppCompatActivity() {
         if(UID.equals(""))
             UID = intent.getStringExtra("uid").toString();
 
+        //new changes here
+        var arr1 = ArrayList<String>()
+        arr1.add("pictureURL1")
+        
+        //testing firebase
+        fbref.newSubmission(
+            UID,
+            "Lost Bag",
+            "Brown Bag with Flaps",
+            "Stamp Student Union",
+            arr1,
+            LocalDateTime.now(),
+            "tag1 tag2"
+        )
+
 
         //get button reference
         addBut = findViewById(R.id.addItemA)
