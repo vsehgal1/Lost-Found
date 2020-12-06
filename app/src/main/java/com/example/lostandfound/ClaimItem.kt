@@ -39,6 +39,7 @@ class ClaimItem : AppCompatActivity() {
         val descView = findViewById<TextView>(R.id.descHold)
         val dateView = findViewById<TextView>(R.id.dtHold)
         val datepostedView= findViewById<TextView>(R.id.dtpHold)
+        val stautsView = findViewById<TextView>(R.id.statusHold)
 
         // retrieve intent data
         val intent = intent
@@ -50,6 +51,8 @@ class ClaimItem : AppCompatActivity() {
         val found = intent.getStringExtra("Found")
         val posted = intent.getStringExtra("Posted")
         val myUID = intent.getStringExtra("MyUID")
+        val id = intent.getStringExtra("ID")
+        var status = intent.getStringExtra("Status").toBoolean()
 
         //change button visibilities based on  who the user is
         if(myUID == uid){
@@ -72,6 +75,11 @@ class ClaimItem : AppCompatActivity() {
         descView.text = desc
         dateView.text = found
         datepostedView.text = posted
+        if (status){
+            stautsView.text = "Item has been claimed"
+        } else{
+            stautsView.text = "Unclaimed"
+        }
 
         //get lost item poster email
         Log.i("Claim","here")
@@ -112,6 +120,15 @@ class ClaimItem : AppCompatActivity() {
             intent.data = Uri.parse("mailto:")
             intent.type = "text/plain"
             startActivity(Intent.createChooser(intent, "Select Email"))
+        }
+
+        deleteButton.setOnClickListener {
+            if (id != null) {
+                fbref.changeStatus(id, true)
+                status = true
+                finish();
+                startActivity(getIntent());
+            }
         }
 
     }

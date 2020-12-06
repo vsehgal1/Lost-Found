@@ -87,7 +87,8 @@ class ScrollingActivity : AppCompatActivity() {
                     "Tawes Hall",
                     "Keys of type Keys",
                     "11/10/2020",
-                    "12/04/2020"
+                    "12/04/2020",
+                    false
                 )
             )
             itemAdapter.flag = true
@@ -101,7 +102,8 @@ class ScrollingActivity : AppCompatActivity() {
                     "Eppley Center",
                     "Iphone XS",
                     "11/24/2020",
-                    "12/04/2020"
+                    "12/04/2020",
+                    false
                 )
             )
             itemAdapter.flag = true
@@ -121,7 +123,9 @@ class ScrollingActivity : AppCompatActivity() {
                 var list = snapshot as ArrayList<LostItemSubmission>
                 fbref.lostItemsList = list
                 for(i:LostItemSubmission in fbref.lostItemsList){
-                    dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
+                    dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name,
+                        i.location, i.description, i.dateFound, i.dateSubmitted,
+                        i.status))
                 }
                 itemAdapter.notifyDataSetChanged()
                 Log.i("Click", "Getting subs")
@@ -150,23 +154,27 @@ class ScrollingActivity : AppCompatActivity() {
 //            Toast.makeText(applicationContext,it.name,Toast.LENGTH_SHORT).show()
             val name = it.name.toString()
             val uid = it.uid.toString()
+            val id = it.id
             val imgURL = it.imgURL
             val location = it.locationFound.toString()
             val desc = it.desc.toString()
             val dateFound = it.dateFound
             val datePosted = it.datePosted
             val selfUID = UID
+            val status = it.status.toString()
 
             //send intent to Claimitem.kt
             val intent = Intent(this, ClaimItem::class.java)
             intent.putExtra("Name", name)
             intent.putExtra("UID", uid)
+            intent.putExtra("ID", id)
             intent.putExtra("MyUID", selfUID)
             intent.putExtra("IMGUrl", imgURL)
             intent.putExtra("Location", location)
             intent.putExtra("Desc", desc)
             intent.putExtra("Found", dateFound)
             intent.putExtra("Posted", datePosted)
+            intent.putExtra("Status", status)
             startActivity(intent)
         }
 
@@ -254,7 +262,8 @@ class ScrollingActivity : AppCompatActivity() {
         fbref.fetchSubmissionsList(listener)
         dataArray.clear()
         for(i:LostItemSubmission in fbref.lostItemsList){
-            dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
+            dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description,
+                i.dateFound, i.dateSubmitted, i.status))
         }
 //            Log.i("Click", "Display local list")
 //            Log.i("Click", dataArray.toString())
