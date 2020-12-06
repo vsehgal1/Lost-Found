@@ -134,7 +134,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
                 }
 
-               //tempRef.uploadImage(name.text.toString(), filePathsList[0], uid, listener)
+               tempRef.uploadImage(name.text.toString(), filePathsList[0], uid, listener)
 
                 tempRef.newSubmission(
                     uid,
