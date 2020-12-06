@@ -10,6 +10,7 @@ import android.text.format.DateFormat.is24HourFormat
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import java.text.DateFormat
+import java.time.LocalDateTime
 import java.util.*
 
 class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -23,6 +24,9 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     lateinit var location: EditText
 
     lateinit var image : ImageView
+
+    lateinit var uid: String
+    lateinit var date: LocalDateTime
 
 
     var day = 0
@@ -42,6 +46,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_enter_lost_item)
+
+        uid = intent.getStringExtra("UID").toString()
 
         name = findViewById(R.id.NameText);
         description = findViewById(R.id.DescriptionText)
@@ -73,6 +79,19 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                 //send back filepaths of images
                 //send back name, location, description, and date/time that was chosen
                 //
+                //val intent = Intent().apply {
+                   // putExtra("message", "This is a message from Activity3")
+                    // Put your data here if you want.
+                //}
+                //setResult(Activity.RESULT_OK, intent)
+
+
+
+                //FireBaseRef.newSubmission(uid, description.text.toString(), location.text.toString(), filePathsList, date, "tags")
+
+
+                Toast.makeText(this, "Your submission is processing now", Toast.LENGTH_SHORT)
+                super.onBackPressed()
             }
 
         }
@@ -93,7 +112,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         myHour = hourOfDay
         myMinute = minute
-        textView.text = "Year: " + myYear + "\n" + "Month: " + myMonth + "\n" + "Day: " + myDay + "\n" + "Hour: " + myHour + "\n" + "Minute: " + myMinute
+        date = LocalDateTime.of(myYear, myMonth, myDay, myHour, myMinute)
+        textView.text = "" + myYear + "-"  + myMonth + "-" + myDay + " " + myHour + ":" + myMinute
     }
 
     private fun openGalleryForImages() {

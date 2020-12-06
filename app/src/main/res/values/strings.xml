@@ -94,7 +94,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_time_selected_string">No Time Selected</string>
     <string name="no_date_selected_string">No Date Selected</string>
-<<<<<<< HEAD
     <string name="title_activity_enter_lost_item">EnterLostItemActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
