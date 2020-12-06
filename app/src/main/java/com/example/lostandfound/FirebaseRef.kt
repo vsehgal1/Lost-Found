@@ -36,7 +36,8 @@ data class LostItemSubmission(
     val pictureURLs: ArrayList<String>,
     val dateFound: String,
     val dateSubmitted: String,
-    val tags: String);
+    val tags: String,
+    val status: Boolean);
 
 data class User(
     val email: String="",
@@ -100,7 +101,7 @@ class FirebaseRef: AppCompatActivity() {
         val current_time = LocalDateTime.now();
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-        val toAdd = LostItemSubmission(id!!, uid, name, location, description, pictureURLs, dateFound.format(formatter), current_time.format(formatter), tags);
+        val toAdd = LostItemSubmission(id!!, uid, name, location, description, pictureURLs, dateFound.format(formatter), current_time.format(formatter), tags, false);
         myRef.child(id).setValue(toAdd);
 
     }
@@ -139,8 +140,9 @@ class FirebaseRef: AppCompatActivity() {
                     var dateFound  = child.child("dateFound").getValue() as String
                     var dateSubmitted = child.child("dateSubmitted").getValue() as String
                     var tags = child.child("tags").getValue() as String
+                    var status = child.child("status").getValue() as Boolean
 
-                    list.add(LostItemSubmission(id, userid.toString(), name, location, description, pictureURLs, dateFound, dateSubmitted, tags))
+                    list.add(LostItemSubmission(id, userid.toString(), name, location, description, pictureURLs, dateFound, dateSubmitted, tags, status))
                 }
 
                 lostItemsList = list
@@ -159,6 +161,22 @@ class FirebaseRef: AppCompatActivity() {
 
         }
         fetchSingleValue(myRef, listener);
+    }
+
+    /**
+     * Function: changeStatus
+     * Changes the status of a given submission ID
+     */
+    public fun changeStatus(id: String, newStatus: Boolean) {
+        val database = Firebase.database
+        val myRef = database.getReference(SUBMISSIONS_PATH).child(id);
+
+        if(myRef == null) {
+            Log.i(TAG, "Cannot Change Status of ID Submission that does not exist");
+            return;
+        }
+
+        myRef.child("status").setValue(newStatus);
     }
 
     /**
