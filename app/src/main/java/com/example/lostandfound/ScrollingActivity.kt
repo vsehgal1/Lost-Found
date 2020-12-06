@@ -123,7 +123,6 @@ class ScrollingActivity : AppCompatActivity() {
         addBut.setOnClickListener {
             dataArray.add(
                 LostItem("asd","fdgd",
-                    R.drawable.key_fig,
                     "https://cdn.shopify.com/s/files/1/0345/1441/products/Spare-Keys_1024x1024.png?v=1421177358",
                     "Keys",
                     "Tawes Hall",
@@ -138,7 +137,6 @@ class ScrollingActivity : AppCompatActivity() {
         addButs.setOnClickListener {
             dataArray.add(
                 LostItem("gfgf","fd",
-                    R.drawable.iphone,
                     "https://www.imore.com/sites/imore.com/files/styles/xlarge/public/field/image/2016/12/iphone-7-jet-black-on-wood.jpeg?itok=GwcpsZF4",
                     "iPhone",
                     "Eppley Center",
@@ -159,10 +157,10 @@ class ScrollingActivity : AppCompatActivity() {
 
         // set listview items to onclick listener
         listView.setOnItemClickListener { parent, view, position, id ->
-            val it : LostItem= itemAdapter.getItem(position) as LostItem
+            val it : LostItem = itemAdapter.getItem(position) as LostItem
 //            Toast.makeText(applicationContext,it.name,Toast.LENGTH_SHORT).show()
             val name = it.name.toString()
-            val imageLoc = it.img.toString()
+            val uid = it.uid.toString()
             val imgURL = it.imgURL
             val location = it.locationFound.toString()
             val desc = it.desc.toString()
@@ -172,7 +170,7 @@ class ScrollingActivity : AppCompatActivity() {
             //send intent to Claimitem.kt
             val intent = Intent(this, ClaimItem::class.java)
             intent.putExtra("Name", name)
-            intent.putExtra("Image", imageLoc)
+            intent.putExtra("UID", uid)
             intent.putExtra("IMGUrl", imgURL)
             intent.putExtra("Location", location)
             intent.putExtra("Desc", desc)
@@ -242,7 +240,7 @@ class ScrollingActivity : AppCompatActivity() {
 //            Log.i("Click", dispGlobalArray(fbref.lostItemsList))
             dataArray.clear()
             for(i:LostItemSubmission in fbref.lostItemsList){
-                dataArray.add(LostItem(i.userid,i.id,0,i.pictureURLs[0],i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
+                dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
             }
 //            Log.i("Click", "Display local list")
 //            Log.i("Click", dataArray.toString())

@@ -46,7 +46,6 @@ class ItemAdapter(private val context: Context,
         val titleView = rowView.findViewById(R.id.txtName) as TextView
         val locationView = rowView.findViewById(R.id.location) as TextView
         val descView = rowView.findViewById(R.id.des) as TextView
-
         val getRef = getItem(position) as LostItem
 //        imageView.setImageResource(getRef.img)
 
@@ -67,7 +66,7 @@ class ItemAdapter(private val context: Context,
         if (flag){
             tempList.clear()
             for(i in dataSource){
-            tempList.add(LostItem(i.uid,i.id,i.img,i.imgURL,i.name,i.locationFound,i.desc, i.dateFound, i.datePosted))
+            tempList.add(LostItem(i.uid,i.id,i.imgURL,i.name,i.locationFound,i.desc, i.dateFound, i.datePosted))
             flag = false
         }}
         val charText = charText.toLowerCase(Locale.getDefault())

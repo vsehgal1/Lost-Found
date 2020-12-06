@@ -3,7 +3,6 @@ package com.example.lostandfound
 
 // Todo - add or remove fields as needed
 class LostItem {
-    var img : Int = 0;
     lateinit var name : String;
     lateinit var locationFound : String;
     lateinit var desc : String;
@@ -13,11 +12,10 @@ class LostItem {
     lateinit var datePosted: String;
     lateinit var imgURL : String;
 
-    constructor(uid: String, id: String, img: Int, imgURL: String,name: String, locationFound: String,
+    constructor(uid: String, id: String, imgURL: String,name: String, locationFound: String,
                 desc: String, dateFound: String, datePosted: String) {
         this.uid = uid
         this.id = id
-        this.img = img
         this.name = name
         this.locationFound = locationFound
         this.desc = desc
