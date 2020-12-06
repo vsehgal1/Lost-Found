@@ -1,27 +1,17 @@
 package com.example.lostandfound
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 
 // The Login Page
 class LoginActivity : AppCompatActivity() {
-
-    val storage = Firebase.storage;
-    val storageRef = storage.getReference();
 
     private lateinit var loginButton: Button
     private lateinit var createButton: Button
@@ -31,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
 
+    // Codes from Firebase Docs: https://firebase.google.com/docs/auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -99,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
                     }
             }
             else { // Input Invalid
-                Toast.makeText(this, "Please Enter Correct Input", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please Enter Valid Inputs", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -126,24 +117,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // Tae's Code Ends Here
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_scrolling, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
 
     companion object {
