@@ -22,6 +22,8 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Log
+import com.google.firebase.database.DatabaseError
 
 
 class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -41,6 +43,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     lateinit var date: LocalDateTime
 
 
+
+
     var day = 0
     var month: Int = 0
     var year: Int = 0
@@ -53,7 +57,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     var myMinute: Int = 0
     val REQUEST_CODE = 200
 
-    var filePathsList = ArrayList<String>()
+    val filePathsList = ArrayList<String>()
+    val filePathsList2 = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,14 +107,41 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                 //}
                 //setResult(Activity.RESULT_OK, intent)
 
+
+
                 val tempRef = FirebaseRef.create()
+                var listener = object: OnGetDataListener {
+                    override fun onSuccess(snapshot: Object) {
+                        var filePathTemp = snapshot as String
+
+                        filePathsList2.add(filePathTemp)
+                        //Log.i("Click", "Getting subs")
+                        //Log.i("Click", list.toString())
+                       // Log.i("Click", "Current length: "+ list.size)
+
+                    }
+
+                    override fun onStart() {
+                    }
+
+                    override fun onFailure(error: Object) {
+                        var err = error as DatabaseError
+                        Log.i(        "Lost&Found-FirebaseRef",  err.message)
+                        Toast.makeText(applicationContext,
+                            "image failed to upload",
+                            Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
+               tempRef.uploadImage(name.text.toString(), filePathsList2[0], uid, listener)
 
                 tempRef.newSubmission(
                     uid,
                     name.text.toString(),
                     description.text.toString(),
                     location.text.toString(),
-                    filePathsList,
+                    filePathsList2,
                     date,
                     tags.text.toString()
                 )
