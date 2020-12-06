@@ -167,7 +167,7 @@ class FirebaseRef: AppCompatActivity() {
      * Function: changeStatus
      * Changes the status of a given submission ID
      */
-    public fun changeStatus(id: String) {
+    public fun changeStatus(id: String, newStatus: Boolean) {
         val database = Firebase.database
         val myRef = database.getReference(SUBMISSIONS_PATH).child(id);
 
@@ -176,7 +176,7 @@ class FirebaseRef: AppCompatActivity() {
             return;
         }
 
-        myRef.child("status").setValue(true);
+        myRef.child("status").setValue(newStatus);
     }
 
     /**
