@@ -49,9 +49,6 @@ data class User(
 
 class FirebaseRef: AppCompatActivity() {
 
-    val storage = Firebase.storage;
-    val storageRef = storage.getReference();
-
     var lostItemsList = ArrayList<LostItemSubmission>()
 
     /**
@@ -172,11 +169,6 @@ class FirebaseRef: AppCompatActivity() {
         val database = Firebase.database
         val myRef = database.getReference(SUBMISSIONS_PATH).child(id);
 
-        if(myRef == null) {
-            Log.i(TAG, "Cannot Change Status of ID Submission that does not exist");
-            return;
-        }
-
         myRef.child("status").setValue(newStatus);
     }
 
@@ -246,6 +238,11 @@ class FirebaseRef: AppCompatActivity() {
         const val IMAGE_PATH = "images/"
         const val SUBMISSIONS_PATH = "submissions/"
         const val USER_PATH = "users/"
+
+        val storage = Firebase.storage;
+        val storageRef = storage.getReference();
+        val imgBucket = "gs://lost-and-found-8fc17.appspot.com/";
+
     }
 }
 

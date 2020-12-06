@@ -108,6 +108,17 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                     override fun onSuccess(snapshot: Object) {
                         filePathTemp = snapshot as String
 
+                        filePathsList2.add(filePathTemp)
+
+                        tempRef.newSubmission(
+                            uid,
+                            name.text.toString(),
+                            description.text.toString(),
+                            location.text.toString(),
+                            filePathsList2,
+                            date,
+                            tags.text.toString()
+                        )
 
                         //Log.i("Click", "Getting subs")
                         //Log.i("Click", list.toString())
@@ -129,19 +140,6 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                 }
 
                tempRef.uploadImage(name.text.toString(), filePathsList[0], uid, listener)
-
-               filePathsList2.add(filePathTemp)
-
-                tempRef.newSubmission(
-                    uid,
-                    name.text.toString(),
-                    description.text.toString(),
-                    location.text.toString(),
-                    filePathsList2,
-                    date,
-                    tags.text.toString()
-                )
-
 
                 Toast.makeText(this, "Your submission is processing now", Toast.LENGTH_SHORT)
 

@@ -64,10 +64,16 @@ class ClaimItem : AppCompatActivity() {
             // if ids don't match then delete will be invisible but claim will be visible
         }
         //set values
-        try{
-            Glide.with(this).load(imgURL).into(imgView)
-        } catch (e: Exception){
-            e.printStackTrace()
+
+        val imgRef = FirebaseRef.storageRef.child(imgURL.toString());
+        imgRef.downloadUrl.addOnSuccessListener { Uri ->
+
+            val imageURL = Uri.toString()
+            try{
+                Glide.with(this).load(imageURL).into(imgView)
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
         }
 
         nameView.text = name

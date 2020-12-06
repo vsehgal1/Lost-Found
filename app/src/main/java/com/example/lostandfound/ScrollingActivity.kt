@@ -66,19 +66,6 @@ class ScrollingActivity : AppCompatActivity() {
         arr1.add("https://media-cdn.yoogiscloset.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/3/1/315012_01_1.jpg")
 
 
-        //testing firebase
-//        fbref.newSubmission(
-//            UID,
-//            "Lost Bag",
-//            "Brown Bag with Flaps",
-//            "Stamp Student Union",
-//            arr1,
-//            LocalDateTime.now(),
-//            "tag1 tag2"
-//        )
-
-
-
         //get button reference
         addBut = findViewById(R.id.addItemA)
         addButs = findViewById(R.id.addItemB)
@@ -285,6 +272,5 @@ class ScrollingActivity : AppCompatActivity() {
     companion object {
         fun create(): FirebaseRef = FirebaseRef();
         const val TAG = "Lost&Found";
-        const val IMAGE_PATH = "images/";
     }
 }
