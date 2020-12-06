@@ -44,6 +44,7 @@ class ScrollingActivity : AppCompatActivity() {
     private lateinit var listView: ListView
     private lateinit var searchView: SearchView
 
+
     //button for test purposes
     private lateinit var addBut: Button
     private lateinit var addButs: Button
@@ -64,6 +65,20 @@ class ScrollingActivity : AppCompatActivity() {
         var arr1 = ArrayList<String>()
         arr1.add("https://media-cdn.yoogiscloset.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/3/1/315012_01_1.jpg")
 
+
+        //testing firebase
+//        fbref.newSubmission(
+//            UID,
+//            "Lost Bag",
+//            "Brown Bag with Flaps",
+//            "Stamp Student Union",
+//            arr1,
+//            LocalDateTime.now(),
+//            "tag1 tag2"
+//        )
+
+
+
         //get button reference
         addBut = findViewById(R.id.addItemA)
         addButs = findViewById(R.id.addItemB)
@@ -80,17 +95,10 @@ class ScrollingActivity : AppCompatActivity() {
         listView.adapter = itemAdapter
 
         addBut.setOnClickListener {
-            dataArray.add(
-                LostItem(UID,"fdgd",
-                    "https://cdn.shopify.com/s/files/1/0345/1441/products/Spare-Keys_1024x1024.png?v=1421177358",
-                    "Keys",
-                    "Tawes Hall",
-                    "Keys of type Keys",
-                    "11/10/2020",
-                    "12/04/2020",
-                    false
-                )
-            )
+            val intent = Intent(this@ScrollingActivity, EnterLostItemActivity::class.java)
+            intent.putExtra("UID", UID)
+            startActivity(intent)
+
             itemAdapter.flag = true
             itemAdapter.notifyDataSetChanged()
         }
