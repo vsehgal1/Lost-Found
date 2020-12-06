@@ -25,6 +25,7 @@ class AccountCreateActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
 
+    // Codes from Firebase Docs: https://firebase.google.com/docs/auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
@@ -46,7 +47,8 @@ class AccountCreateActivity : AppCompatActivity() {
                 val password = passwordText.text.toString()
                 val name = nameText.text.toString()
                 val number = phoneNumberText.text.toString()
-                val userID = email.removeSuffix("@terpmail.umd.edu")
+                val userID = email.removeSuffix("@terpmail.umd.edu").removeSuffix("@umd.edu")
+
 
                 Log.i(TAG, "email: "+ email)
                 Log.i(TAG, "password: "+ password)
@@ -108,8 +110,9 @@ class AccountCreateActivity : AppCompatActivity() {
             Log.i(TAG, "invalid input, return false")
             return false
         }
-        // @terpmail.umd.edu Check
-        if (!emailText.text.contains("@terpmail.umd.edu")) {
+        // Check for @terpmail.umd.edu or @umd.edu
+        if (!emailText.text.contains("@terpmail.umd.edu") &&
+            !emailText.text.contains("@umd.edu")) {
             return false
         }
         Log.i(TAG, "Valid input, return true")

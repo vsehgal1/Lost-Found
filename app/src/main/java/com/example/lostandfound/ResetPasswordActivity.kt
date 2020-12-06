@@ -16,6 +16,7 @@ class ResetPasswordActivity : AppCompatActivity() {
     lateinit var resetPassword: Button
     private lateinit var email: EditText
 
+    // Codes from Firebase Docs: https://firebase.google.com/docs/auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset)
