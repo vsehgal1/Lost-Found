@@ -67,6 +67,7 @@ class FirebaseRef: AppCompatActivity() {
         in_listener.onStart()
 
         val path = IMAGE_PATH + submission_id +"/"+ fName
+
         // setReferences to database
         val filePathRef = storageRef.child(IMAGE_PATH).child(submission_id).child(fName);
 
