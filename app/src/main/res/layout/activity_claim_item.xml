@@ -113,12 +113,43 @@
         android:layout_centerHorizontal="true"
         android:text="TextView" />
 
+    <!--    label for Status-->
+
+    <TextView
+        android:id="@+id/statusLabel"
+        android:layout_below="@+id/descHold"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:text="Claimed" />
+
+    <!--    description-->
+    <TextView
+        android:id="@+id/statusHold"
+        android:layout_below="@+id/statusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="TextView" />
+
     <Button
         android:id="@+id/claim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/descHold"
+        android:layout_below="@+id/statusHold"
         android:layout_centerHorizontal="true"
         android:text="Claim" />
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/statusHold"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:text="DELETE" />
 </RelativeLayout>

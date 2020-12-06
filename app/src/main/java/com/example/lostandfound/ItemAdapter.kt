@@ -66,7 +66,7 @@ class ItemAdapter(private val context: Context,
         if (flag){
             tempList.clear()
             for(i in dataSource){
-            tempList.add(LostItem(i.uid,i.id,i.imgURL,i.name,i.locationFound,i.desc, i.dateFound, i.datePosted))
+            tempList.add(LostItem(i.uid,i.id,i.imgURL,i.name,i.locationFound,i.desc, i.dateFound, i.datePosted, i.status))
             flag = false
         }}
         val charText = charText.toLowerCase(Locale.getDefault())
