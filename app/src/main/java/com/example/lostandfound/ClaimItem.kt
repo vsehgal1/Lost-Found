@@ -75,6 +75,7 @@ class ClaimItem : AppCompatActivity() {
         descView.text = desc
         dateView.text = found
         datepostedView.text = posted
+        Log.i("store", status.toString())
         if (status){
             stautsView.text = "Item has been claimed"
         } else{
@@ -126,8 +127,9 @@ class ClaimItem : AppCompatActivity() {
             if (id != null) {
                 fbref.changeStatus(id, true)
                 status = true
-                finish();
-                startActivity(getIntent());
+                stautsView.text = "Item has been claimed"
+//                finish();
+//                startActivity(getIntent());
             }
         }
 

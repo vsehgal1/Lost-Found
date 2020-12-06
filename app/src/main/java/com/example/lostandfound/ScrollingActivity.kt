@@ -139,6 +139,7 @@ class ScrollingActivity : AppCompatActivity() {
                 Log.i("Click", "Getting subs")
                 Log.i("Click", list.toString())
                 Log.i("Click", "Current length: "+ list.size)
+                Log.i("store", "at scroll: "+ list[0].status)
 
             }
 
@@ -243,38 +244,42 @@ class ScrollingActivity : AppCompatActivity() {
     }
 
     fun updateLocalList(){
+                finish();
+                startActivity(getIntent());
 //            Log.i("Click", "come to updateLocalList")
 //            Log.i("Click", dispGlobalArray(fbref.lostItemsList))
-        var listener = object: OnGetDataListener {
-            override fun onSuccess(snapshot: Object) {
-                var list = snapshot as ArrayList<LostItemSubmission>
-                fbref.lostItemsList = list
-                Log.i("Click", "Getting subs")
-                Log.i("Click", list.toString())
-                Log.i("Click", "Current length: "+ list.size)
+//        var listener = object: OnGetDataListener {
+//            override fun onSuccess(snapshot: Object) {
+//                var list = snapshot as ArrayList<LostItemSubmission>
+//                fbref.lostItemsList = list
+//
+//                Log.i("Click", "Getting subs")
+//                Log.i("Click", list.toString())
+//                Log.i("Click", "Current length: "+ list.size)
+//            }
+//
+//            override fun onStart() {
+//            }
+//
+//            override fun onFailure(error: Object) {
+//                var err = error as DatabaseError
+//                Log.i(TAG, err.message)
+//                Toast.makeText(applicationContext,
+//                    "NETWORK ERROR - Please check your network connection",
+//                    Toast.LENGTH_SHORT).show()
+//            }
+//
+//        }
+//        fbref.fetchSubmissionsList(listener)
+//        dataArray.clear()
+//        for(i:LostItemSubmission in fbref.lostItemsList){
+//            dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description,
+//                i.dateFound, i.dateSubmitted, i.status))
+//        }
+////            Log.i("Click", "Display local list")
+////            Log.i("Click", dataArray.toString())
+//        Log.i("store", "at scroll: "+ dataArray[0].status)
 
-            }
-
-            override fun onStart() {
-            }
-
-            override fun onFailure(error: Object) {
-                var err = error as DatabaseError
-                Log.i(TAG, err.message)
-                Toast.makeText(applicationContext,
-                    "NETWORK ERROR - Please check your network connection",
-                    Toast.LENGTH_SHORT).show()
-            }
-
-        }
-        fbref.fetchSubmissionsList(listener)
-        dataArray.clear()
-        for(i:LostItemSubmission in fbref.lostItemsList){
-            dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description,
-                i.dateFound, i.dateSubmitted, i.status))
-        }
-//            Log.i("Click", "Display local list")
-//            Log.i("Click", dataArray.toString())
     }
 
     companion object {
