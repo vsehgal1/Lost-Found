@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+//import com.bumptech.glide.Glide
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -23,7 +25,7 @@ class ItemAdapter(private val context: Context,
 //    }
 
     override fun getCount(): Int {
-//        TODO("Not yet implemented")
+//        TODO("Not yet implemented")s
         return dataSource.size
     }
 
@@ -46,7 +48,13 @@ class ItemAdapter(private val context: Context,
         val descView = rowView.findViewById(R.id.des) as TextView
 
         val getRef = getItem(position) as LostItem
-        imageView.setImageResource(getRef.img)
+//        imageView.setImageResource(getRef.img)
+
+        try{
+            Glide.with(context).load(getRef.imgURL).into(imageView)
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
         titleView.text = getRef.name
         locationView.text = getRef.locationFound
         descView.text = getRef.desc
@@ -59,7 +67,7 @@ class ItemAdapter(private val context: Context,
         if (flag){
             tempList.clear()
             for(i in dataSource){
-            tempList.add(LostItem(i.uid,i.id,i.img,i.name,i.locationFound,i.desc, i.dateFound, i.datePosted))
+            tempList.add(LostItem(i.uid,i.id,i.img,i.imgURL,i.name,i.locationFound,i.desc, i.dateFound, i.datePosted))
             flag = false
         }}
         val charText = charText.toLowerCase(Locale.getDefault())

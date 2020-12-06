@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.activity_scrolling.*
 import java.io.File
 import java.io.FileInputStream
 import java.net.URI
@@ -45,6 +46,10 @@ class ScrollingActivity : AppCompatActivity() {
     //button for test purposes
     private lateinit var addBut: Button
     private lateinit var addButs: Button
+    private lateinit var refreshButton: Button
+
+    // create local array
+    private lateinit var dataArray : ArrayList<LostItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +61,7 @@ class ScrollingActivity : AppCompatActivity() {
 
         //new changes here
         var arr1 = ArrayList<String>()
-        arr1.add("pictureURL1")
+        arr1.add("https://media-cdn.yoogiscloset.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/3/1/315012_01_1.jpg")
         
         //testing firebase
         fbref.newSubmission(
@@ -73,19 +78,23 @@ class ScrollingActivity : AppCompatActivity() {
         //get button reference
         addBut = findViewById(R.id.addItemA)
         addButs = findViewById(R.id.addItemB)
-
+        refreshButton = findViewById(R.id.refreshButton)
         //Get list view of scroll activity
         listView = findViewById(R.id.listView)
         searchView = findViewById(R.id.searchView)
 
         //Local phone instance array
-        var dataArray = ArrayList<LostItem>()
+        dataArray = ArrayList<LostItem>()
 
         // Retrieve firebase data:
         var listener = object: OnGetDataListener {
             override fun onSuccess(snapshot: Object) {
                 var list = snapshot as ArrayList<LostItemSubmission>
-                Log.i(TAG, list.toString())
+                fbref.lostItemsList = list
+                Log.i("Click", "Getting subs")
+                Log.i("Click", list.toString())
+                Log.i("Click", "Current length: "+ list.size)
+
             }
 
             override fun onStart() {
@@ -104,9 +113,8 @@ class ScrollingActivity : AppCompatActivity() {
 
         //populate local arraylist from with fetched submissions from global arraylist
         // image value is passed as 0 for now
-        for(i:LostItemSubmission in fbref.lostItemsList){
-            dataArray.add(LostItem(i.userid,i.id,0,i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
-        }
+
+
 
         // create itemAdapter object
         val itemAdapter = ItemAdapter(this, dataArray)
@@ -116,6 +124,7 @@ class ScrollingActivity : AppCompatActivity() {
             dataArray.add(
                 LostItem("asd","fdgd",
                     R.drawable.key_fig,
+                    "https://cdn.shopify.com/s/files/1/0345/1441/products/Spare-Keys_1024x1024.png?v=1421177358",
                     "Keys",
                     "Tawes Hall",
                     "Keys of type Keys",
@@ -130,6 +139,7 @@ class ScrollingActivity : AppCompatActivity() {
             dataArray.add(
                 LostItem("gfgf","fd",
                     R.drawable.iphone,
+                    "https://www.imore.com/sites/imore.com/files/styles/xlarge/public/field/image/2016/12/iphone-7-jet-black-on-wood.jpeg?itok=GwcpsZF4",
                     "iPhone",
                     "Eppley Center",
                     "Iphone XS",
@@ -141,12 +151,19 @@ class ScrollingActivity : AppCompatActivity() {
             itemAdapter.notifyDataSetChanged()
         }
 
+        refreshButton.setOnClickListener {
+            Log.i("Click","Refresh Clicked")
+            updateLocalList()
+            itemAdapter.notifyDataSetChanged()
+        }
+
         // set listview items to onclick listener
         listView.setOnItemClickListener { parent, view, position, id ->
             val it : LostItem= itemAdapter.getItem(position) as LostItem
 //            Toast.makeText(applicationContext,it.name,Toast.LENGTH_SHORT).show()
             val name = it.name.toString()
             val imageLoc = it.img.toString()
+            val imgURL = it.imgURL
             val location = it.locationFound.toString()
             val desc = it.desc.toString()
             val dateFound = it.dateFound
@@ -156,13 +173,13 @@ class ScrollingActivity : AppCompatActivity() {
             val intent = Intent(this, ClaimItem::class.java)
             intent.putExtra("Name", name)
             intent.putExtra("Image", imageLoc)
+            intent.putExtra("IMGUrl", imgURL)
             intent.putExtra("Location", location)
             intent.putExtra("Desc", desc)
             intent.putExtra("Found", dateFound)
             intent.putExtra("Posted", datePosted)
             startActivity(intent)
         }
-
 
         // create search view object
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -182,6 +199,12 @@ class ScrollingActivity : AppCompatActivity() {
             })
         }
 
+//    override fun onStart() {
+//        super.onStart()
+//        Log.i("Click", "started onStart")
+//        updateLocalList()
+//
+//    }
 
         override fun onCreateOptionsMenu(menu: Menu): Boolean {
             // Inflate the menu; this adds items to the action bar if it is present.
@@ -198,6 +221,31 @@ class ScrollingActivity : AppCompatActivity() {
                 R.id.action_settings -> true
                 else -> super.onOptionsItemSelected(item)
             }
+        }
+
+        fun displayArray(arrList : ArrayList<LostItem>): String {
+            for (i in arrList){
+                Log.i("Click", i.name + i.id)
+            }
+            return "done"
+        }
+        fun dispGlobalArray(arrList : ArrayList<LostItemSubmission>): String {
+            Log.i("Click", "Global List:")
+            for (i in arrList){
+                Log.i("Click", i.name +" " +i.id+ " "+ i.pictureURLs[0])
+            }
+            return "done"
+        }
+
+        fun updateLocalList(){
+//            Log.i("Click", "come to updateLocalList")
+//            Log.i("Click", dispGlobalArray(fbref.lostItemsList))
+            dataArray.clear()
+            for(i:LostItemSubmission in fbref.lostItemsList){
+                dataArray.add(LostItem(i.userid,i.id,0,i.pictureURLs[0],i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
+            }
+//            Log.i("Click", "Display local list")
+//            Log.i("Click", dataArray.toString())
         }
 
         companion object {

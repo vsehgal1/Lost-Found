@@ -53,6 +53,14 @@
         android:layout_toRightOf="@id/addItemA"
         android:text="Add Item B" />
 
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:layout_toRightOf="@id/addItemB"
+        android:text="Refresh" />
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

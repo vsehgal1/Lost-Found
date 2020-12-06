@@ -2,6 +2,7 @@ package com.example.lostandfound
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 // This is for sending email once item has been claimed.
@@ -14,6 +15,7 @@ class ItemClaimConfirm: AppCompatActivity() {
     // Send Claim Confirmation Email
     // email -> Recipient
     fun sendClaimConfirmEmail (email: String) {
+        Log.i("Claim", "reached itemclaimconfirm")
         val intent = Intent(Intent.ACTION_SEND)
         val mTitle = "Lost & Found: Item Claim Confirmation"
         val mMsg = "This email is to notify you that the item you have listed on Lost & Found has been claimed \n\n\n " +
