@@ -24,6 +24,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
 import com.google.firebase.database.DatabaseError
+import kotlin.collections.ArrayList
 
 
 class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -101,20 +102,13 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
             if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
                 && textView.text != "" ){
 
-                //val intent = Intent().apply {
-                   // putExtra("message", "This is a message from Activity3")
-                    // Put your data here if you want.
-                //}
-                //setResult(Activity.RESULT_OK, intent)
-
-
-
+                var filePathTemp = "" as String
                 val tempRef = FirebaseRef.create()
                 val listener = object: OnGetDataListener {
                     override fun onSuccess(snapshot: Object) {
-                        val filePathTemp = snapshot as String
+                        filePathTemp = snapshot as String
 
-                        filePathsList2.add(filePathTemp)
+
                         //Log.i("Click", "Getting subs")
                         //Log.i("Click", list.toString())
                        // Log.i("Click", "Current length: "+ list.size)
@@ -135,6 +129,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                 }
 
                tempRef.uploadImage(name.text.toString(), filePathsList[0], uid, listener)
+
+               filePathsList2.add(filePathTemp)
 
                 tempRef.newSubmission(
                     uid,
@@ -275,17 +271,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         return null
     }
 
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     * @author Niks
-     */
+
     private fun getDataColumn(context: Context, uri: Uri?, selection: String?,
                               selectionArgs: Array<String>?): String? {
 
@@ -305,26 +291,16 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         return null
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
+
     private fun isExternalStorageDocument(uri: Uri): Boolean {
         return "com.android.externalstorage.documents" == uri.authority
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
+
     private fun isDownloadsDocument(uri: Uri): Boolean {
         return "com.android.providers.downloads.documents" == uri.authority
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
     private fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
     }
