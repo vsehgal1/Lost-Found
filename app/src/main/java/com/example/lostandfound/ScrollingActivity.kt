@@ -92,7 +92,7 @@ class ScrollingActivity : AppCompatActivity() {
 
         addBut.setOnClickListener {
             dataArray.add(
-                LostItem("asd","fdgd",
+                LostItem(UID,"fdgd",
                     "https://cdn.shopify.com/s/files/1/0345/1441/products/Spare-Keys_1024x1024.png?v=1421177358",
                     "Keys",
                     "Tawes Hall",
@@ -106,7 +106,7 @@ class ScrollingActivity : AppCompatActivity() {
         }
         addButs.setOnClickListener {
             dataArray.add(
-                LostItem("gfgf","fd",
+                LostItem(UID,"fd",
                     "https://www.imore.com/sites/imore.com/files/styles/xlarge/public/field/image/2016/12/iphone-7-jet-black-on-wood.jpeg?itok=GwcpsZF4",
                     "iPhone",
                     "Eppley Center",
@@ -166,11 +166,13 @@ class ScrollingActivity : AppCompatActivity() {
             val desc = it.desc.toString()
             val dateFound = it.dateFound
             val datePosted = it.datePosted
+            val selfUID = UID
 
             //send intent to Claimitem.kt
             val intent = Intent(this, ClaimItem::class.java)
             intent.putExtra("Name", name)
             intent.putExtra("UID", uid)
+            intent.putExtra("MyUID", selfUID)
             intent.putExtra("IMGUrl", imgURL)
             intent.putExtra("Location", location)
             intent.putExtra("Desc", desc)

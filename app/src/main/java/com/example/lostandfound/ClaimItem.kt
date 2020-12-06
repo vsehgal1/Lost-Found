@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,8 +28,10 @@ class ClaimItem : AppCompatActivity() {
         back.setDisplayHomeAsUpEnabled(true)
 
 
-        //get reference to "CLAIM" button
+        //get reference to "CLAIM" & "DELETE" button
         val claimButton = findViewById<Button>(R.id.claim)
+        val deleteButton = findViewById<Button>(R.id.delete)
+
         //get image and text view id
         val imgView = findViewById<ImageView>(R.id.imageHold)
         val nameView = findViewById<TextView>(R.id.titleHold)
@@ -46,7 +49,17 @@ class ClaimItem : AppCompatActivity() {
         val imgURL = intent.getStringExtra("IMGUrl")
         val found = intent.getStringExtra("Found")
         val posted = intent.getStringExtra("Posted")
+        val myUID = intent.getStringExtra("MyUID")
 
+        //change button visibilities based on  who the user is
+        if(myUID == uid){
+            claimButton.visibility = View.INVISIBLE
+            deleteButton.visibility = View.VISIBLE
+        }
+        else{
+            // do nothing
+            // if ids don't match then delete will be invisible but claim will be visible
+        }
         //set values
         try{
             Glide.with(this).load(imgURL).into(imgView)

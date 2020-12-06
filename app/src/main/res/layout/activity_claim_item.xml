@@ -121,4 +121,13 @@
         android:layout_below="@+id/descHold"
         android:layout_centerHorizontal="true"
         android:text="Claim" />
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/claim"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:text="DELETE" />
 </RelativeLayout>
