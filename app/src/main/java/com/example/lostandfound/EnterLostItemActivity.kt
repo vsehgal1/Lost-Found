@@ -110,9 +110,9 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
 
                 val tempRef = FirebaseRef.create()
-                var listener = object: OnGetDataListener {
+                val listener = object: OnGetDataListener {
                     override fun onSuccess(snapshot: Object) {
-                        var filePathTemp = snapshot as String
+                        val filePathTemp = snapshot as String
 
                         filePathsList2.add(filePathTemp)
                         //Log.i("Click", "Getting subs")
@@ -134,7 +134,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
                 }
 
-               tempRef.uploadImage(name.text.toString(), filePathsList2[0], uid, listener)
+               //tempRef.uploadImage(name.text.toString(), filePathsList[0], uid, listener)
 
                 tempRef.newSubmission(
                     uid,
@@ -192,9 +192,9 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                 if (data.data != null) {
                     // if single image is selected
 
-                    var imageURI = data.data
+                    val imageURI = data.data
                    // val uriPathHelper = URIPathHelper()
-                    var filePath = imageURI?.let { getRealPathFromURIAPI19(this, it) }
+                    val filePath = imageURI?.let { getRealPathFromURIAPI19(this, it) }
                    // val filePath = uriPathHelper.getPath(this, imageURI)
 
                     //if (filePath != null) {
