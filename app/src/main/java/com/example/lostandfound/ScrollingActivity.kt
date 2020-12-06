@@ -64,15 +64,15 @@ class ScrollingActivity : AppCompatActivity() {
         arr1.add("https://media-cdn.yoogiscloset.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/3/1/315012_01_1.jpg")
         
         //testing firebase
-        fbref.newSubmission(
-            UID,
-            "Lost Bag",
-            "Brown Bag with Flaps",
-            "Stamp Student Union",
-            arr1,
-            LocalDateTime.now(),
-            "tag1 tag2"
-        )
+//        fbref.newSubmission(
+//            UID,
+//            "Lost Bag",
+//            "Brown Bag with Flaps",
+//            "Stamp Student Union",
+//            arr1,
+//            LocalDateTime.now(),
+//            "tag1 tag2"
+//        )
 
 
         //get button reference
@@ -85,36 +85,6 @@ class ScrollingActivity : AppCompatActivity() {
 
         //Local phone instance array
         dataArray = ArrayList<LostItem>()
-
-        // Retrieve firebase data:
-        var listener = object: OnGetDataListener {
-            override fun onSuccess(snapshot: Object) {
-                var list = snapshot as ArrayList<LostItemSubmission>
-                fbref.lostItemsList = list
-                Log.i("Click", "Getting subs")
-                Log.i("Click", list.toString())
-                Log.i("Click", "Current length: "+ list.size)
-
-            }
-
-            override fun onStart() {
-            }
-
-            override fun onFailure(error: Object) {
-                var err = error as DatabaseError
-                Log.i(TAG, err.message)
-                Toast.makeText(applicationContext,
-                    "NETWORK ERROR - Please check your network connection",
-                    Toast.LENGTH_SHORT).show()
-            }
-
-        }
-        fbref.fetchSubmissionsList(listener)
-
-        //populate local arraylist from with fetched submissions from global arraylist
-        // image value is passed as 0 for now
-
-
 
         // create itemAdapter object
         val itemAdapter = ItemAdapter(this, dataArray)
@@ -154,6 +124,36 @@ class ScrollingActivity : AppCompatActivity() {
             updateLocalList()
             itemAdapter.notifyDataSetChanged()
         }
+
+        // Retrieve firebase data:
+        //populate local arraylist from with fetched submissions from global arraylist
+        var listener = object: OnGetDataListener {
+            override fun onSuccess(snapshot: Object) {
+                var list = snapshot as ArrayList<LostItemSubmission>
+                fbref.lostItemsList = list
+                for(i:LostItemSubmission in fbref.lostItemsList){
+                    dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description, i.dateFound, i.dateSubmitted))
+                }
+                itemAdapter.notifyDataSetChanged()
+                Log.i("Click", "Getting subs")
+                Log.i("Click", list.toString())
+                Log.i("Click", "Current length: "+ list.size)
+
+            }
+
+            override fun onStart() {
+            }
+
+            override fun onFailure(error: Object) {
+                var err = error as DatabaseError
+                Log.i(TAG, err.message)
+                Toast.makeText(applicationContext,
+                    "NETWORK ERROR - Please check your network connection",
+                    Toast.LENGTH_SHORT).show()
+            }
+
+        }
+        fbref.fetchSubmissionsList(listener)
 
         // set listview items to onclick listener
         listView.setOnItemClickListener { parent, view, position, id ->
@@ -238,6 +238,29 @@ class ScrollingActivity : AppCompatActivity() {
         fun updateLocalList(){
 //            Log.i("Click", "come to updateLocalList")
 //            Log.i("Click", dispGlobalArray(fbref.lostItemsList))
+            var listener = object: OnGetDataListener {
+                override fun onSuccess(snapshot: Object) {
+                    var list = snapshot as ArrayList<LostItemSubmission>
+                    fbref.lostItemsList = list
+                    Log.i("Click", "Getting subs")
+                    Log.i("Click", list.toString())
+                    Log.i("Click", "Current length: "+ list.size)
+
+                }
+
+                override fun onStart() {
+                }
+
+                override fun onFailure(error: Object) {
+                    var err = error as DatabaseError
+                    Log.i(TAG, err.message)
+                    Toast.makeText(applicationContext,
+                        "NETWORK ERROR - Please check your network connection",
+                        Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            fbref.fetchSubmissionsList(listener)
             dataArray.clear()
             for(i:LostItemSubmission in fbref.lostItemsList){
                 dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description, i.dateFound, i.dateSubmitted))

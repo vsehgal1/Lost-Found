@@ -40,7 +40,7 @@ class ClaimItem : AppCompatActivity() {
         // retrieve intent data
         val intent = intent
         val name = intent.getStringExtra("Name")
-//        val uid = intent.getStringExtra("UID")
+        val uid = intent.getStringExtra("UID")
         val location = intent.getStringExtra("Location")
         val desc = intent.getStringExtra("Desc")
         val imgURL = intent.getStringExtra("IMGUrl")
@@ -61,31 +61,31 @@ class ClaimItem : AppCompatActivity() {
         datepostedView.text = posted
 
         //get lost item poster email
-//        Log.i("Claim","here")
-//        var listener = object: OnGetDataListener {
-//            override fun onSuccess(snapshot: Object) {
-//                var user = snapshot as User
-//                email = user.email
-//                Log.i("Claim", "Getting EMail")
-//                Log.i("Claim", email)
-//
-//            }
-//
-//            override fun onStart() {
-//            }
-//
-//            override fun onFailure(error: Object) {
-//                var err = error as DatabaseError
-//                Log.i(ScrollingActivity.TAG, err.message)
-//                Toast.makeText(applicationContext,
-//                    "NETWORK ERROR - Please check your network connection",
-//                    Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
-//        if (uid != null) {
-//            fbref.findUserByID(uid,listener)
-//        }
+        Log.i("Claim","here")
+        var listener = object: OnGetDataListener {
+            override fun onSuccess(snapshot: Object) {
+                var user = snapshot as User
+                email = user.email
+                Log.i("Claim", "Getting EMail")
+                Log.i("Claim", email)
+
+            }
+
+            override fun onStart() {
+            }
+
+            override fun onFailure(error: Object) {
+                var err = error as DatabaseError
+                Log.i(ScrollingActivity.TAG, err.message)
+                Toast.makeText(applicationContext,
+                    "NETWORK ERROR - Please check your network connection",
+                    Toast.LENGTH_SHORT).show()
+            }
+
+        }
+        if (uid != null) {
+            fbref.findUserByID(uid, listener)
+        }
         claimButton.setOnClickListener {
             Log.i("Claim", "Pressed claim")
             Log.i("Claim", "reached itemclaimconfirm")
@@ -93,7 +93,7 @@ class ClaimItem : AppCompatActivity() {
             val mTitle = "Lost & Found: Item Claim Confirmation"
             val mMsg = "This email is to notify you that the item you have listed on Lost & Found has been claimed \n\n\n " +
                     "This is an automated message. Please DO NOT reply to this email."
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("vik@gmail.com"))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
             intent.putExtra(Intent.EXTRA_SUBJECT, mTitle)
             intent.putExtra(Intent.EXTRA_TEXT, mMsg)
             intent.data = Uri.parse("mailto:")

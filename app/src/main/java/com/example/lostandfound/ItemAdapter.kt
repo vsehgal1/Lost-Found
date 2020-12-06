@@ -81,7 +81,9 @@ class ItemAdapter(private val context: Context,
         else{
             Log.i("Click", "looking for length != 0")
             for(i in tempList){
-                if(i.locationFound.contains(charText) or i.name.toLowerCase().contains(charText) or i.desc.contains(charText))
+                if(i.locationFound.contains(charText, ignoreCase = true) or
+                    i.name.toLowerCase().contains(charText,ignoreCase = true) or
+                    i.desc.contains(charText, ignoreCase = true))
                     dataSource.add(i)
             }
             Log.i("Click", "temp_list after else:" + tempList.size.toString())
