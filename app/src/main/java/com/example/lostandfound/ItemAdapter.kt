@@ -77,6 +77,7 @@ class ItemAdapter(
         descView.text = getRef.desc
         if(getStatus){
             rowView.setBackgroundColor(Color.parseColor("#c76d76"))
+            titleView.text = getRef.name + " (Claimed)";
         }
         else{
             rowView.setBackgroundColor(Color.parseColor("#6dcf87"))
