@@ -63,10 +63,13 @@ class FirebaseRef: AppCompatActivity() {
     public fun uploadImage(fName: String, fpath: String, submission_id: String, in_listener: OnGetDataListener) {
         in_listener.onStart()
 
-        val path = IMAGE_PATH + submission_id +"/"+ fName
+        var uniqueID = UUID.randomUUID().toString()
+
+        // creates unique id for the file on storage
+        val path = IMAGE_PATH + submission_id +"/"+ fName + "-" + uniqueID
 
         // setReferences to database
-        val filePathRef = storageRef.child(IMAGE_PATH).child(submission_id).child(fName);
+        val filePathRef = storageRef.child(IMAGE_PATH).child(submission_id).child(fName + uniqueID);
 
         // upload image via stream
         val imgFile = File(fpath) as File;

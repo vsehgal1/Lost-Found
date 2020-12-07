@@ -108,8 +108,9 @@
     <TextView
         android:id="@+id/descHold"
         android:layout_below="@+id/descLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:text="TextView" />
 
@@ -126,7 +127,7 @@
         android:layout_centerHorizontal="true"
         android:text="Claimed" />
 
-    <!--    description-->
+    <!--    status -->
     <TextView
         android:id="@+id/statusHold"
         android:layout_below="@+id/statusLabel"
@@ -151,5 +152,5 @@
         android:layout_below="@+id/statusHold"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
-        android:text="DELETE" />
+        android:text="ITEM CLAIMED" />
 </RelativeLayout>

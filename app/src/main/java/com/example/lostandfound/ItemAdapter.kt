@@ -1,5 +1,6 @@
 package com.example.lostandfound
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,11 @@ import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
+/***
+ * CUSTOM ADAPTER
+ *
+ * used for dynamically creating rows of items.
+ */
 
 class ItemAdapter(
     private val context: Context,
@@ -28,10 +34,6 @@ class ItemAdapter(
     var flag = true
     var tempList : ArrayList<LostItem> = ArrayList()
 
-
-//    init {
-//        this.tempList.addAll(dataSource)
-//    }
 
     override fun getCount(): Int {
 //        TODO("Not yet implemented")s
@@ -48,6 +50,7 @@ class ItemAdapter(
         return position.toLong()
     }
 
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 //        TODO("Not yet implemented")
         val rowView = inflater.inflate(R.layout.list_row, parent, false)
@@ -57,7 +60,7 @@ class ItemAdapter(
         val descView = rowView.findViewById(R.id.des) as TextView
         val getRef = getItem(position) as LostItem
 
-        val imgRef = FirebaseRef.storageRef.child(getRef.imgURL);
+        val imgRef = FirebaseRef.storageRef.child(getRef.imgURL)
         imgRef.downloadUrl.addOnSuccessListener { Uri ->
 
             val imageURL = Uri.toString()
@@ -74,7 +77,11 @@ class ItemAdapter(
         return rowView
     }
 
-    //filter function
+    /***
+     * Filter function used for searching.
+     * Filters based on if any of the item properties contains the value present in
+     * the search field.
+     */
     fun filter(charText: String){
         //create deep copy of
         if (flag){
@@ -97,9 +104,7 @@ class ItemAdapter(
         }}
         val charText = charText.toLowerCase(Locale.getDefault())
         dataSource.clear()
-        Log.i("Click", "temp_list at call:" + tempList.size.toString())
-        Log.i("Click", "datasource at call:" + dataSource.size.toString())
-        if(charText.length == 0){
+        if(charText.isEmpty()){
             Log.i("Click", "looking for length == 0")
             dataSource.clear()
             dataSource.addAll(tempList)

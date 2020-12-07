@@ -44,26 +44,41 @@ class ScrollingActivity : AppCompatActivity() {
         if(UID.equals(""))
             UID = intent.getStringExtra("uid").toString();
 
-        //new changes here
-        var arr1 = ArrayList<String>()
-        arr1.add("https://media-cdn.yoogiscloset.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/3/1/315012_01_1.jpg")
-
-
-        //get button reference
+        /***
+         *      get button reference
+         ***/
         addBut = findViewById(R.id.addItemA)
-        addButs = findViewById(R.id.addItemB)
         refreshButton = findViewById(R.id.refreshButton)
-        //Get list view of scroll activity
+
+        /***
+         *      get reference to listView and searchView
+         ***/
         listView = findViewById(R.id.listView)
         searchView = findViewById(R.id.searchView)
 
-        //Local phone instance array
+        /***
+         *      local array which stores the information from the global database
+         ***/
         dataArray = ArrayList<LostItem>()
 
-        // create itemAdapter object
+        /***
+         *      get refernce to custom itemAdapter which is used for dynamically adding
+         *      rows to the listview
+         ***/
         val itemAdapter = ItemAdapter(this, dataArray)
         listView.adapter = itemAdapter
 
+        /***
+         *      add onClick listeners to the add and refresh button
+         *
+         *      The add button starts the EnterLostItemActivity. This activity allows user
+         *      to post lost item. The current userID is sent as an external to be attached to the
+         *      submission.
+         *
+         *      The refresh button calls the updateLocalList() function which basically
+         *      restarts the activity. This helps fetching the data from the firebase to
+         *      our local array.
+         ***/
         addBut.setOnClickListener {
             val intent = Intent(this@ScrollingActivity, EnterLostItemActivity::class.java)
             intent.putExtra("UID", UID)
@@ -72,43 +87,60 @@ class ScrollingActivity : AppCompatActivity() {
             itemAdapter.flag = true
             itemAdapter.notifyDataSetChanged()
         }
-        addButs.setOnClickListener {
-            dataArray.add(
-                LostItem(
-                    UID, "fd",
-                    "https://www.imore.com/sites/imore.com/files/styles/xlarge/public/field/image/2016/12/iphone-7-jet-black-on-wood.jpeg?itok=GwcpsZF4",
-                    "iPhone",
-                    "Eppley Center",
-                    "Iphone XS",
-                    "11/24/2020",
-                    "12/04/2020",
-                    false
-                )
-            )
-            itemAdapter.flag = true
-            itemAdapter.notifyDataSetChanged()
-        }
-
         refreshButton.setOnClickListener {
             Log.i("Click", "Refresh Clicked")
             updateLocalList()
             itemAdapter.notifyDataSetChanged()
         }
 
-        // Retrieve firebase data:
-        //populate local arraylist from with fetched submissions from global arraylist
+        /***
+         *      Use to retrieve information from the firebase database when the activity
+         *      first starts.
+         *      It gets a snapshot of the data present, populates the global list, and then
+         *      is deep copies into the local list.
+         ***/
         var listener = object: OnGetDataListener {
             override fun onSuccess(snapshot: Object) {
                 var list = snapshot as ArrayList<LostItemSubmission>
                 fbref.lostItemsList = list
-                for(i:LostItemSubmission in fbref.lostItemsList){
-                    dataArray.add(
-                        LostItem(
-                            i.userid, i.id, i.pictureURLs[0], i.name,
-                            i.location, i.description, i.dateFound, i.dateSubmitted,
-                            i.status
+
+                // first lists the items that have not been claimed
+                var itemsSize = fbref.lostItemsList.size
+                for(i in itemsSize-1 downTo 0) {
+                    if(list[i].status == false) {
+                        dataArray.add(
+                            LostItem(
+                                list[i].userid,
+                                list[i].id,
+                                list[i].pictureURLs[0],
+                                list[i].name,
+                                list[i].location,
+                                list[i].description,
+                                list[i].dateFound,
+                                list[i].dateSubmitted,
+                                list[i].status
+                            )
                         )
-                    )
+                    }
+                }
+
+                // list items that have been claimed in the past
+                for(i in itemsSize-1 downTo 0) {
+                    if(list[i].status == true) {
+                        dataArray.add(
+                            LostItem(
+                                list[i].userid,
+                                list[i].id,
+                                list[i].pictureURLs[0],
+                                list[i].name,
+                                list[i].location,
+                                list[i].description,
+                                list[i].dateFound,
+                                list[i].dateSubmitted,
+                                list[i].status
+                            )
+                        )
+                    }
                 }
                 itemAdapter.notifyDataSetChanged()
 
@@ -130,10 +162,18 @@ class ScrollingActivity : AppCompatActivity() {
         }
         fbref.fetchSubmissionsList(listener)
 
-        // set listview items to onclick listener
+        /***
+         *      create click listener for each row.
+         *      Once a row is clicked it is passed on to another activity, ClaimItem.kt.
+         *      The activity is sent relevant information to be displayed, used for
+         *      emailing.
+         *
+         *      We also send the current userID. we compare the userID of the item and that
+         *      of the user. If they are similar that means the user posted that item, giving
+         *      the user ability to set the posting as claimed.
+         ***/
         listView.setOnItemClickListener { parent, view, position, id ->
             val it : LostItem = itemAdapter.getItem(position) as LostItem
-//            Toast.makeText(applicationContext,it.name,Toast.LENGTH_SHORT).show()
             val name = it.name.toString()
             val uid = it.uid.toString()
             val id = it.id
@@ -145,7 +185,6 @@ class ScrollingActivity : AppCompatActivity() {
             val selfUID = UID
             val status = it.status.toString()
 
-            //send intent to Claimitem.kt
             val intent = Intent(this, ClaimItem::class.java)
             intent.putExtra("Name", name)
             intent.putExtra("UID", uid)
@@ -160,7 +199,12 @@ class ScrollingActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // create search view object
+        /***
+         *      SEARCH FUNCTIONALITY
+         *      Adds a query change listener to the search field.
+         *      If the field notices any changes then it calls the filter function,
+         *      in the listAdapter and displays the those certain lists.
+         ***/
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -186,71 +230,47 @@ class ScrollingActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
+        /***
+         *      Handle action bar item clicks here. The action bar will
+         *      automatically handle clicks on the Home/Up button, so long
+         *      as you specify a parent activity in AndroidManifest.xml.
+         ***/
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+
+    /***
+     * displayArray and dispGlobalArray are used for debugging purposes.
+     */
     fun displayArray(arrList: ArrayList<LostItem>): String {
         for (i in arrList){
-            Log.i("Click", i.name + i.id)
+            Log.i(locArr, i.name + i.id)
         }
         return "done"
     }
     fun dispGlobalArray(arrList: ArrayList<LostItemSubmission>): String {
-        Log.i("Click", "Global List:")
         for (i in arrList){
-            Log.i("Click", i.name + " " + i.id + " " + i.pictureURLs[0])
+            Log.i(globalArr, i.name + " " + i.id + " " + i.pictureURLs[0])
         }
         return "done"
     }
 
+    /***
+     * restart activity
+     ***/
     fun updateLocalList(){
                 finish();
                 startActivity(getIntent());
-//            Log.i("Click", "come to updateLocalList")
-//            Log.i("Click", dispGlobalArray(fbref.lostItemsList))
-//        var listener = object: OnGetDataListener {
-//            override fun onSuccess(snapshot: Object) {
-//                var list = snapshot as ArrayList<LostItemSubmission>
-//                fbref.lostItemsList = list
-//
-//                Log.i("Click", "Getting subs")
-//                Log.i("Click", list.toString())
-//                Log.i("Click", "Current length: "+ list.size)
-//            }
-//
-//            override fun onStart() {
-//            }
-//
-//            override fun onFailure(error: Object) {
-//                var err = error as DatabaseError
-//                Log.i(TAG, err.message)
-//                Toast.makeText(applicationContext,
-//                    "NETWORK ERROR - Please check your network connection",
-//                    Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
-//        fbref.fetchSubmissionsList(listener)
-//        dataArray.clear()
-//        for(i:LostItemSubmission in fbref.lostItemsList){
-//            dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name, i.location, i.description,
-//                i.dateFound, i.dateSubmitted, i.status))
-//        }
-////            Log.i("Click", "Display local list")
-////            Log.i("Click", dataArray.toString())
-//        Log.i("store", "at scroll: "+ dataArray[0].status)
 
     }
 
     companion object {
         fun create(): FirebaseRef = FirebaseRef();
         const val TAG = "Lost&Found";
+        const val locArr = "local"
+        const val globalArr = "global"
     }
 }
