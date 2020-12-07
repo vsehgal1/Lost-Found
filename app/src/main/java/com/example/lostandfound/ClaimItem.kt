@@ -68,6 +68,10 @@ class ClaimItem : AppCompatActivity() {
         val imgRef = FirebaseRef.storageRef.child(imgURL.toString());
         imgRef.downloadUrl.addOnSuccessListener { Uri ->
 
+            /***
+             * https://medium.com/@egemenhamutcu/displaying-images-from-firebase-storage-using-glide-for-kotlin-projects-3e4950f6c103
+             * reference for using glide with kotlin
+             */
             val imageURL = Uri.toString()
             try{
                 Glide.with(this).load(imageURL).into(imgView)

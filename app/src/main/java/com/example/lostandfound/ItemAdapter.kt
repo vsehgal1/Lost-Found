@@ -27,6 +27,12 @@ import kotlin.collections.ArrayList
  * used for dynamically creating rows of items.
  */
 
+/***
+ * https://www.raywenderlich.com/155-android-listview-tutorial-with-kotlin
+ *
+ * used the link above to learn how custom listView adapter works.
+ */
+
 class ItemAdapter(
     private val context: Context,
     private val dataSource: ArrayList<LostItem>
@@ -89,6 +95,11 @@ class ItemAdapter(
      * Filter function used for searching.
      * Filters based on if any of the item properties contains the value present in
      * the search field.
+     */
+
+    /***
+     * https://www.codegrepper.com/code-examples/kotlin/android+listview+search+filter+custom+adapter+kotlin
+     * used as a reference for filter functionality
      */
     fun filter(charText: String){
         //create deep copy of
