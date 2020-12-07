@@ -2,6 +2,7 @@ package com.example.lostandfound
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -59,7 +60,7 @@ class ItemAdapter(
         val locationView = rowView.findViewById(R.id.location) as TextView
         val descView = rowView.findViewById(R.id.des) as TextView
         val getRef = getItem(position) as LostItem
-
+        val getStatus = getRef.status
         val imgRef = FirebaseRef.storageRef.child(getRef.imgURL)
         imgRef.downloadUrl.addOnSuccessListener { Uri ->
 
@@ -74,6 +75,12 @@ class ItemAdapter(
         titleView.text = getRef.name
         locationView.text = getRef.locationFound
         descView.text = getRef.desc
+        if(getStatus){
+            rowView.setBackgroundColor(Color.parseColor("#c76d76"))
+        }
+        else{
+            rowView.setBackgroundColor(Color.parseColor("#6dcf87"))
+        }
         return rowView
     }
 
