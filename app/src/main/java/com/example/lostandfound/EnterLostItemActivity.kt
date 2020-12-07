@@ -66,6 +66,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     val filePathsList = ArrayList<String>()
     val filePathsList2 = ArrayList<String>()
 
+    var bool: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_enter_lost_item)
@@ -117,7 +119,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
     fun submitItem() {
         if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
-            && textView.text.toString() != "" ){
+            && textView.text.toString() != "" && bool){
 
             var filePathTemp = "" as String
             val tempRef = FirebaseRef.create()
@@ -236,6 +238,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                     val filePath = imageURI?.let { getRealPathFromURIAPI19(this, it) }
                     if (filePath != null) {
                         filePathsList.add(filePath)
+                        bool = true
                     }
                     image.setImageURI(imageURI)
 
