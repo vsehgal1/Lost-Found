@@ -28,6 +28,11 @@ import android.util.Log
 import com.google.firebase.database.DatabaseError
 import kotlin.collections.ArrayList
 
+/* I used a few helper functions from the following link: https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
+in order to get the filepath of images (from the gallery). Unfortunately, the imageURI received does not function as the filepath.
+For files to be submitted to firebase, they have to have the full filepath of the image (which android doesn't handle very nicely :) )
+* */
+
 
 class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     lateinit var textView: TextView
@@ -103,6 +108,9 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
+    /*this is the function that actually submits a new lost item
+    first uploads image, retrieves firebase URL to the newly uploaded image
+    then submits new submission to firebase with all relevant attributes*/
     fun submitItem() {
         if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
             && textView.text != "" ){
@@ -145,6 +153,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
+    //once the user accepts the permissions for storage, they can now choose an image
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
@@ -163,6 +172,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
+    //this function first makes the user choose a date, only moving on to the timepicker after the date is chosen
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         myDay = day
         myYear = year
@@ -176,6 +186,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         )
         timePickerDialog.show()
     }
+
+    //this function is run once the user chose a date. Changes text to reflect user-chosen time
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         myHour = hourOfDay
         myMinute = minute
@@ -184,6 +196,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         textView.text = date.toString().replace("T", " ")
     }
 
+    //opens the phone's gallery through intent
     private fun openGalleryForImages() {
         var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -192,6 +205,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         startActivityForResult(intent, REQUEST_CODE);
     }
 
+    //Once the user picks an image, this function processes the image and converts its imageURI to a real filepath
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -199,16 +213,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
             if (data != null) {
                 if (data.data != null) {
-                    // if single image is selected
-
                     val imageURI = data.data
-                   // val uriPathHelper = URIPathHelper()
                     val filePath = imageURI?.let { getRealPathFromURIAPI19(this, it) }
-                   // val filePath = uriPathHelper.getPath(this, imageURI)
-
-                    //if (filePath != null) {
-                     //   filePathsList.add(filePath)
-                    //}
                     if (filePath != null) {
                         filePathsList.add(filePath)
                     }
@@ -219,6 +225,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
+    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
+    //converts URI to filepath
     fun getRealPathFromURIAPI19(context: Context, uri: Uri): String? {
 
         val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
@@ -284,7 +292,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         return null
     }
 
-
+    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
+    //converts URI to filepath
     private fun getDataColumn(context: Context, uri: Uri?, selection: String?,
                               selectionArgs: Array<String>?): String? {
 
@@ -304,21 +313,26 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         return null
     }
 
-
+    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
+    //converts URI to filepath
     private fun isExternalStorageDocument(uri: Uri): Boolean {
         return "com.android.externalstorage.documents" == uri.authority
     }
 
-
+    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
+    //converts URI to filepath
     private fun isDownloadsDocument(uri: Uri): Boolean {
         return "com.android.providers.downloads.documents" == uri.authority
     }
 
+    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
+    //converts URI to filepath
     private fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
     }
 
-
+    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
+    //converts URI to filepath
     private fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
     }

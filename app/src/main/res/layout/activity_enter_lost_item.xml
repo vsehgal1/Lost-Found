@@ -28,6 +28,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="44dp"
         android:ems="10"
+        android:maxLength="140"
         android:inputType="textPersonName"
         android:text="Name"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +41,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="116dp"
         android:ems="10"
+        android:maxLength="140"
         android:inputType="textPersonName"
         android:text="Description"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +55,7 @@
         android:layout_marginTop="184dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:maxLength="140"
         android:text="Location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -106,8 +109,8 @@
 
     <ImageView
         android:id="@+id/imageAdded"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
