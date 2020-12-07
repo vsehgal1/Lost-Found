@@ -27,8 +27,6 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_login)
 
-        // Tae' Code Starts Here
-
         loginButton = findViewById(R.id.login_button)
         createButton = findViewById(R.id.new_account)
         emailText = findViewById(R.id.email)
@@ -116,12 +114,7 @@ class LoginActivity : AppCompatActivity() {
         Log.i(TAG, "password text set blank")
     }
 
-    // Tae's Code Ends Here
-
-
     companion object {
-        fun create(): FirebaseRef = FirebaseRef();
         const val TAG = "Lost&Found"
-        const val IMAGE_PATH = "images/"
     }
 }

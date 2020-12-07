@@ -9,7 +9,6 @@ import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-// Tae Jung's Code:
 // This code is for password reset
 class ResetPasswordActivity : AppCompatActivity() {
 

@@ -12,7 +12,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
-// Tae Jung's Code:
 // This code is for creating an account
 class AccountCreateActivity : AppCompatActivity() {
 
@@ -117,7 +116,6 @@ class AccountCreateActivity : AppCompatActivity() {
         Log.i(TAG, "Valid input, return true")
         return true
     }
-
 
     companion object {
         const val TAG = "Lost&Found"
