@@ -118,7 +118,8 @@ class ScrollingActivity : AppCompatActivity() {
                                 list[i].description,
                                 list[i].dateFound,
                                 list[i].dateSubmitted,
-                                list[i].status
+                                list[i].status,
+                                list[i].tags
                             )
                         )
                     }
@@ -137,7 +138,8 @@ class ScrollingActivity : AppCompatActivity() {
                                 list[i].description,
                                 list[i].dateFound,
                                 list[i].dateSubmitted,
-                                list[i].status
+                                list[i].status,
+                                list[i].tags
                             )
                         )
                     }

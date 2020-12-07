@@ -11,10 +11,11 @@ class LostItem {
     lateinit var dateFound: String;
     lateinit var datePosted: String;
     lateinit var imgURL : String;
+    lateinit var tags : String
     var status: Boolean
 
     constructor(uid: String, id: String, imgURL: String,name: String, locationFound: String,
-                desc: String, dateFound: String, datePosted: String, status: Boolean) {
+                desc: String, dateFound: String, datePosted: String, status: Boolean, tags: String) {
         this.uid = uid
         this.id = id
         this.name = name
@@ -24,6 +25,7 @@ class LostItem {
         this.datePosted = datePosted
         this.imgURL = imgURL
         this.status = status
+        this.tags = tags
     }
 
 }

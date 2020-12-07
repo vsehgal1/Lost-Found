@@ -104,7 +104,8 @@ class ItemAdapter(
                     i.desc,
                     i.dateFound,
                     i.datePosted,
-                    i.status
+                    i.status,
+                    i.tags
                 )
             )
             flag = false
@@ -121,7 +122,8 @@ class ItemAdapter(
             for(i in tempList){
                 if(i.locationFound.contains(charText, ignoreCase = true) or
                     i.name.toLowerCase().contains(charText, ignoreCase = true) or
-                    i.desc.contains(charText, ignoreCase = true))
+                    i.desc.contains(charText, ignoreCase = true) or
+                        i.tags.contains(charText, ignoreCase = true))
                     dataSource.add(i)
             }
             Log.i("Click", "temp_list after else:" + tempList.size.toString())
