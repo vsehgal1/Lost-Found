@@ -166,7 +166,8 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         myHour = hourOfDay
         myMinute = minute
         date = LocalDateTime.of(myYear, myMonth, myDay, myHour, myMinute)
-        textView.text = "" + myYear + "-"  + myMonth + "-" + myDay + " " + myHour + ":" + myMinute
+
+        textView.text = date.toString().replace("T", " ")
     }
 
     private fun openGalleryForImages() {
