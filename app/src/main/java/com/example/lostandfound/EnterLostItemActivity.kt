@@ -108,9 +108,13 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
-    /*this is the function that actually submits a new lost item
-    first uploads image, retrieves firebase URL to the newly uploaded image
-    then submits new submission to firebase with all relevant attributes*/
+    /**
+     *  Function: submitItem
+     *  this is the function that actually submits a new lost item
+     *  first uploads image, retrieves firebase URL to the newly uploaded image
+     *  then submits new submission to firebase with all relevant attributes
+     */
+
     fun submitItem() {
         if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
             && textView.text != "" ){
@@ -153,7 +157,10 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
-    //once the user accepts the permissions for storage, they can now choose an image
+    /**
+     * Function: onRequestPermissionsResult
+     * once the user accepts the permissions for storage, they can now choose an image
+     */
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
@@ -172,7 +179,10 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
-    //this function first makes the user choose a date, only moving on to the timepicker after the date is chosen
+    /**
+     * Function: onDateSet
+     * makes the user choose a date, only moving on to the timepicker after the date is chosen
+     */
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         myDay = day
         myYear = year
@@ -187,7 +197,10 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         timePickerDialog.show()
     }
 
-    //this function is run once the user chose a date. Changes text to reflect user-chosen time
+    /**
+     * Function: onTimeSet
+     * run once the user chose a date. Changes text to reflect user-chosen time
+     */
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         myHour = hourOfDay
         myMinute = minute
@@ -196,7 +209,10 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         textView.text = date.toString().replace("T", " ")
     }
 
-    //opens the phone's gallery through intent
+    /**
+     * Function: openGalleryForImages
+     * opens the phone's gallery through intent
+     */
     private fun openGalleryForImages() {
         var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -205,7 +221,10 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         startActivityForResult(intent, REQUEST_CODE);
     }
 
-    //Once the user picks an image, this function processes the image and converts its imageURI to a real filepath
+    /**
+     * Function: onActivityResult
+     * Once the user picks an image, this function processes the image and converts its imageURI to a real filepath
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -225,8 +244,10 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         }
     }
 
-    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
-    //converts URI to filepath
+    /**
+     * Function: getRealPathFromURIAPI19
+     * helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a that converts URI to filepath
+     */
     fun getRealPathFromURIAPI19(context: Context, uri: Uri): String? {
 
         val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
@@ -292,8 +313,10 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         return null
     }
 
-    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
-    //converts URI to filepath
+    /**
+     * Function: getDataColumn
+     * helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a that converts URI to filepath
+     */
     private fun getDataColumn(context: Context, uri: Uri?, selection: String?,
                               selectionArgs: Array<String>?): String? {
 
@@ -313,26 +336,35 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         return null
     }
 
-    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
-    //converts URI to filepath
+    /**
+     * Function: isExternalStorageDocument
+     * helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a that converts URI to filepath
+     */
+
     private fun isExternalStorageDocument(uri: Uri): Boolean {
         return "com.android.externalstorage.documents" == uri.authority
     }
 
-    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
-    //converts URI to filepath
+    /**
+     * Function: isDownloadsStorageDocument
+     * helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a that converts URI to filepath
+     */
     private fun isDownloadsDocument(uri: Uri): Boolean {
         return "com.android.providers.downloads.documents" == uri.authority
     }
 
-    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
-    //converts URI to filepath
+    /**
+     * Function: isMediaDocument
+     * helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a that converts URI to filepath
+     */
     private fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
     }
 
-    //helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a
-    //converts URI to filepath
+    /**
+     * Function: isGooglePhotosUri
+     * helper function from https://gist.github.com/MeNiks/947b471b762f3b26178ef165a7f5558a that converts URI to filepath
+     */
     private fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
     }
