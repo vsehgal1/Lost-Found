@@ -21,6 +21,13 @@ import java.util.*
 import javax.sql.RowSetListener
 import kotlin.collections.ArrayList
 
+/**
+ * References used:
+ * - https://firebase.google.com/docs/database/android/read-and-write
+ * - https://firebase.google.com/docs/storage/android/upload-files
+ * - https://stackoverflow.com/questions/30659569/wait-until-firebase-retrieves-data
+ */
+
 public interface OnGetDataListener {
     fun onSuccess(snapshot: Object);
     fun onStart();
@@ -66,7 +73,7 @@ class FirebaseRef: AppCompatActivity() {
         var uniqueID = UUID.randomUUID().toString()
 
         // creates unique id for the file on storage
-        val path = IMAGE_PATH + submission_id +"/"+ fName + "-" + uniqueID
+        val path = IMAGE_PATH + submission_id +"/"+ fName + uniqueID
 
         // setReferences to database
         val filePathRef = storageRef.child(IMAGE_PATH).child(submission_id).child(fName + uniqueID);
