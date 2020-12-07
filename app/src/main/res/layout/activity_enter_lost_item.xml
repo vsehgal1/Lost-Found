@@ -30,7 +30,7 @@
         android:ems="10"
         android:maxLength="140"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="@string/name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +43,7 @@
         android:ems="10"
         android:maxLength="140"
         android:inputType="textPersonName"
-        android:text="Description"
+        android:hint="@string/description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,7 +56,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:maxLength="140"
-        android:text="Location"
+        android:hint="@string/location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +68,7 @@
         android:layout_marginTop="252dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Tags"
+        android:hint="@string/tags"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

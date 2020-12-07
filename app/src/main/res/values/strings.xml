@@ -31,7 +31,11 @@
     <string name="password2">Password:</string>
     <string name="full_name">Full Name:</string>
     <string name="phone">Phone #:</string>
->>>>>>> 73f6deea7b5dd6e916a0736c2760cd1bcb0985f5
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="tags">Tags</string>
+    <string name="location">Location</string>
+    >>>>>>> 73f6deea7b5dd6e916a0736c2760cd1bcb0985f5
 
 
 </resources>
