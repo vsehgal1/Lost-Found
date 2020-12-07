@@ -137,6 +137,9 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                         date,
                         tags.text.toString()
                     )
+                    Toast.makeText(applicationContext,
+                        "Submission Uploaded! Hit refresh to see",
+                        Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onStart() {}
