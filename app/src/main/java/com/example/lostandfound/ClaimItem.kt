@@ -115,8 +115,6 @@ class ClaimItem : AppCompatActivity() {
             fbref.findUserByID(uid, listener)
         }
         claimButton.setOnClickListener {
-            Log.i("Claim", "Pressed claim")
-            Log.i("Claim", "reached itemclaimconfirm")
             val intent = Intent(Intent.ACTION_SEND)
             val mTitle = "Lost & Found: Item Claim Confirmation"
             val mMsg = "This email is to notify you that the item you have listed on Lost & Found has been claimed \n\n\n " +
@@ -134,8 +132,6 @@ class ClaimItem : AppCompatActivity() {
                 fbref.changeStatus(id, true)
                 status = true
                 stautsView.text = "Item has been claimed"
-//                finish();
-//                startActivity(getIntent());
             }
         }
 
