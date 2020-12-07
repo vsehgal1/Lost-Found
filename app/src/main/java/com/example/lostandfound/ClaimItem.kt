@@ -121,8 +121,7 @@ class ClaimItem : AppCompatActivity() {
         claimButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             val mTitle = "Lost & Found: Item Claim Confirmation"
-            val mMsg = "This email is to notify you that the item you have listed on Lost & Found has been claimed \n\n\n " +
-                    "This is an automated message. Please DO NOT reply to this email."
+            val mMsg = "Hello,\nI would like to claim an item you have submitted on the UMD Lost and Found app."
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
             intent.putExtra(Intent.EXTRA_SUBJECT, mTitle)
             intent.putExtra(Intent.EXTRA_TEXT, mMsg)
