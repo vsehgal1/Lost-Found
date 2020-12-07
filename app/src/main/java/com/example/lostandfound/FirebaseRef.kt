@@ -241,7 +241,6 @@ class FirebaseRef: AppCompatActivity() {
 
         val storage = Firebase.storage;
         val storageRef = storage.getReference();
-        val imgBucket = "gs://lost-and-found-8fc17.appspot.com/";
 
     }
 }

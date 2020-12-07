@@ -94,7 +94,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
         buttonAddPictures = findViewById(R.id.btnAddPictures)
         buttonAddPictures.setOnClickListener{
-            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSIONS_CODE)
         }
         buttonSubmission = findViewById(R.id.btnSubmission)
 
@@ -107,7 +107,6 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
             && textView.text != "" ){
 
-            Log.i("TAG","Uploading New Submission: " + name.text.toString());
             var filePathTemp = "" as String
             val tempRef = FirebaseRef.create()
             val listener = object: OnGetDataListener {
@@ -149,7 +148,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            1 -> {
+            PERMISSIONS_CODE -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openGalleryForImages()
@@ -322,6 +321,11 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
     private fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
+    }
+
+    companion object {
+        val TAG = "Lost&Found - EnterLostItemActivity"
+        val PERMISSIONS_CODE = 1
     }
 }
 
