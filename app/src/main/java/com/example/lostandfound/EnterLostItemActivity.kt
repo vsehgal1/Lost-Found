@@ -117,7 +117,7 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
     fun submitItem() {
         if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
-            && textView.text != "" ){
+            && textView.text.toString() != "" ){
 
             var filePathTemp = "" as String
             val tempRef = FirebaseRef.create()
