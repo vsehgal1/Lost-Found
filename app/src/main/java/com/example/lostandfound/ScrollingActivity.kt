@@ -103,14 +103,44 @@ class ScrollingActivity : AppCompatActivity() {
             override fun onSuccess(snapshot: Object) {
                 var list = snapshot as ArrayList<LostItemSubmission>
                 fbref.lostItemsList = list
-                for(i:LostItemSubmission in fbref.lostItemsList){
-                    dataArray.add(
-                        LostItem(
-                            i.userid, i.id, i.pictureURLs[0], i.name,
-                            i.location, i.description, i.dateFound, i.dateSubmitted,
-                            i.status
+
+                // first lists the items that have not been claimed
+                var itemsSize = fbref.lostItemsList.size
+                for(i in itemsSize-1 downTo 0) {
+                    if(list[i].status == false) {
+                        dataArray.add(
+                            LostItem(
+                                list[i].userid,
+                                list[i].id,
+                                list[i].pictureURLs[0],
+                                list[i].name,
+                                list[i].location,
+                                list[i].description,
+                                list[i].dateFound,
+                                list[i].dateSubmitted,
+                                list[i].status
+                            )
                         )
-                    )
+                    }
+                }
+
+                // list items that have been claimed in the past
+                for(i in itemsSize-1 downTo 0) {
+                    if(list[i].status == true) {
+                        dataArray.add(
+                            LostItem(
+                                list[i].userid,
+                                list[i].id,
+                                list[i].pictureURLs[0],
+                                list[i].name,
+                                list[i].location,
+                                list[i].description,
+                                list[i].dateFound,
+                                list[i].dateSubmitted,
+                                list[i].status
+                            )
+                        )
+                    }
                 }
                 itemAdapter.notifyDataSetChanged()
 
