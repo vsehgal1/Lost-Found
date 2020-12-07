@@ -3,35 +3,18 @@ package com.example.lostandfound
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_scrolling.*
-import java.io.File
-import java.io.FileInputStream
-import java.net.URI
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ScrollingActivity : AppCompatActivity() {
 
@@ -91,7 +74,8 @@ class ScrollingActivity : AppCompatActivity() {
         }
         addButs.setOnClickListener {
             dataArray.add(
-                LostItem(UID,"fd",
+                LostItem(
+                    UID, "fd",
                     "https://www.imore.com/sites/imore.com/files/styles/xlarge/public/field/image/2016/12/iphone-7-jet-black-on-wood.jpeg?itok=GwcpsZF4",
                     "iPhone",
                     "Eppley Center",
@@ -106,7 +90,7 @@ class ScrollingActivity : AppCompatActivity() {
         }
 
         refreshButton.setOnClickListener {
-            Log.i("Click","Refresh Clicked")
+            Log.i("Click", "Refresh Clicked")
             updateLocalList()
             itemAdapter.notifyDataSetChanged()
         }
@@ -118,15 +102,15 @@ class ScrollingActivity : AppCompatActivity() {
                 var list = snapshot as ArrayList<LostItemSubmission>
                 fbref.lostItemsList = list
                 for(i:LostItemSubmission in fbref.lostItemsList){
-                    dataArray.add(LostItem(i.userid,i.id,i.pictureURLs[0],i.name,
-                        i.location, i.description, i.dateFound, i.dateSubmitted,
-                        i.status))
+                    dataArray.add(
+                        LostItem(
+                            i.userid, i.id, i.pictureURLs[0], i.name,
+                            i.location, i.description, i.dateFound, i.dateSubmitted,
+                            i.status
+                        )
+                    )
                 }
                 itemAdapter.notifyDataSetChanged()
-                Log.i("Click", "Getting subs")
-                Log.i("Click", list.toString())
-                Log.i("Click", "Current length: "+ list.size)
-                Log.i("store", "at scroll: "+ list[0].status)
 
             }
 
@@ -136,9 +120,11 @@ class ScrollingActivity : AppCompatActivity() {
             override fun onFailure(error: Object) {
                 var err = error as DatabaseError
                 Log.i(TAG, err.message)
-                Toast.makeText(applicationContext,
+                Toast.makeText(
+                    applicationContext,
                     "NETWORK ERROR - Please check your network connection",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         }
@@ -192,12 +178,6 @@ class ScrollingActivity : AppCompatActivity() {
         })
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        Log.i("Click", "started onStart")
-//        updateLocalList()
-//
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -216,16 +196,16 @@ class ScrollingActivity : AppCompatActivity() {
         }
     }
 
-    fun displayArray(arrList : ArrayList<LostItem>): String {
+    fun displayArray(arrList: ArrayList<LostItem>): String {
         for (i in arrList){
             Log.i("Click", i.name + i.id)
         }
         return "done"
     }
-    fun dispGlobalArray(arrList : ArrayList<LostItemSubmission>): String {
+    fun dispGlobalArray(arrList: ArrayList<LostItemSubmission>): String {
         Log.i("Click", "Global List:")
         for (i in arrList){
-            Log.i("Click", i.name +" " +i.id+ " "+ i.pictureURLs[0])
+            Log.i("Click", i.name + " " + i.id + " " + i.pictureURLs[0])
         }
         return "done"
     }

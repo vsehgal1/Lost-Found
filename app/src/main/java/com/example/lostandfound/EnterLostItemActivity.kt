@@ -1,5 +1,6 @@
 package com.example.lostandfound
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -16,6 +17,7 @@ import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.content.CursorLoader
+import android.content.pm.PackageManager
 import android.database.Cursor
 
 import android.os.Build
@@ -42,8 +44,6 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
     lateinit var uid: String
     lateinit var date: LocalDateTime
-
-
 
 
     var day = 0
@@ -94,61 +94,76 @@ class EnterLostItemActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
         buttonAddPictures = findViewById(R.id.btnAddPictures)
         buttonAddPictures.setOnClickListener{
-            openGalleryForImages()
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
         }
         buttonSubmission = findViewById(R.id.btnSubmission)
 
         buttonSubmission.setOnClickListener{
-            if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
-                && textView.text != "" ){
+            submitItem()
+        }
+    }
 
-                var filePathTemp = "" as String
-                val tempRef = FirebaseRef.create()
-                val listener = object: OnGetDataListener {
-                    override fun onSuccess(snapshot: Object) {
-                        filePathTemp = snapshot as String
+    fun submitItem() {
+        if (name.text.toString() != "Name" && description.text.toString() != "Description" && location.text.toString() != "Location"
+            && textView.text != "" ){
 
-                        filePathsList2.add(filePathTemp)
+            Log.i("TAG","Uploading New Submission: " + name.text.toString());
+            var filePathTemp = "" as String
+            val tempRef = FirebaseRef.create()
+            val listener = object: OnGetDataListener {
+                override fun onSuccess(snapshot: Object) {
+                    filePathTemp = snapshot as String
 
-                        tempRef.newSubmission(
-                            uid,
-                            name.text.toString(),
-                            description.text.toString(),
-                            location.text.toString(),
-                            filePathsList2,
-                            date,
-                            tags.text.toString()
-                        )
-
-                        //Log.i("Click", "Getting subs")
-                        //Log.i("Click", list.toString())
-                       // Log.i("Click", "Current length: "+ list.size)
-
-                    }
-
-                    override fun onStart() {
-                    }
-
-                    override fun onFailure(error: Object) {
-                        var err = error as DatabaseError
-                        Log.i(        "Lost&Found-FirebaseRef",  err.message)
-                        Toast.makeText(applicationContext,
-                            "image failed to upload",
-                            Toast.LENGTH_SHORT).show()
-                    }
-
+                    filePathsList2.add(filePathTemp)
+                    tempRef.newSubmission(
+                        uid,
+                        name.text.toString(),
+                        description.text.toString(),
+                        location.text.toString(),
+                        filePathsList2,
+                        date,
+                        tags.text.toString()
+                    )
                 }
 
-               tempRef.uploadImage(name.text.toString(), filePathsList[0], uid, listener)
+                override fun onStart() {}
 
-                Toast.makeText(this, "Your submission is processing now", Toast.LENGTH_SHORT)
+                override fun onFailure(error: Object) {
+                    var err = error as DatabaseError
+                    Log.i(        "Lost&Found-FirebaseRef",  err.message)
+                    Toast.makeText(applicationContext,
+                        "image failed to upload",
+                        Toast.LENGTH_SHORT).show()
+                }
 
-                super.onBackPressed()
             }
 
-        }
+            tempRef.uploadImage(name.text.toString(), filePathsList[0], uid, listener)
 
+            Toast.makeText(this, "Your submission is processing now", Toast.LENGTH_SHORT)
+
+            super.onBackPressed()
+        }
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            1 -> {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openGalleryForImages()
+
+                } else {
+
+                    Toast.makeText(this, "Permission Denied for Image", Toast.LENGTH_SHORT);
+
+                }
+                return
+            }
+        }
+    }
+
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         myDay = day
         myYear = year

@@ -41,7 +41,6 @@ class AccountCreateActivity : AppCompatActivity() {
 
         // Create Account Button
         createButton.setOnClickListener {
-            Log.i(TAG, "hello")
             if (validInputs()) { // Proceed if inputs are valid
                 val email = emailText.text.toString()
                 val password = passwordText.text.toString()
